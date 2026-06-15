@@ -198,21 +198,8 @@ export function ServicesHomePage() {
 
   return (
     <div className="animate-fade-in text-right" dir="rtl">
-      {/* ── Fixed Watermark — truly fixed during scroll ───────────── */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-x-0 bottom-0 pointer-events-none select-none z-[1] flex items-center justify-center"
-        style={{ top: '56px' }}
-      >
-        <img
-          src={logo}
-          alt=""
-          className="w-[72vmin] h-[72vmin] object-contain opacity-[0.09]"
-        />
-      </div>
-
-      {/* ── Hero Section — z-10 so it sits above the fixed watermark ── */}
-      <section className="hero-gradient text-white py-20 md:py-24 px-4 text-center relative z-10 overflow-hidden">
+      {/* ── Hero Section ─────────────────────────────────────────── */}
+      <section className="hero-gradient text-white py-20 md:py-24 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="relative z-10 max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-black leading-tight">
@@ -222,16 +209,30 @@ export function ServicesHomePage() {
       </section>
 
       {/* ── Main Light Content Area ── */}
-      <div className="relative bg-white/95 pb-16">
+      <div className="relative bg-white pb-16">
 
         <div className="relative z-10">
           {/* ── Important Links Section ─────────────────────────────────── */}
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-            <div className="text-center max-w-xl mx-auto mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {/* Section wrapper: relative+overflow-hidden to contain the watermark */}
+            <div className="relative overflow-hidden rounded-3xl py-8 px-2">
+              {/* Watermark — behind cards only, inside this section */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0"
+              >
+                <img
+                  src={logo}
+                  alt=""
+                  className="w-[320px] md:w-[460px] object-contain opacity-[0.11]"
+                />
+              </div>
+
+              <div className="relative z-10 text-center max-w-xl mx-auto mb-8">
+                <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة</h2>
+              </div>
+
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {/* Card 1: WhatsApp */}
               <a
                 href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
@@ -277,6 +278,7 @@ export function ServicesHomePage() {
                   <p className="text-sm text-on-surface-muted mt-1">الصفحة الرئيسية</p>
                 </div>
               </a>
+              </div>
             </div>
           </section>
 
