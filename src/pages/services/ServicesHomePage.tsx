@@ -198,8 +198,21 @@ export function ServicesHomePage() {
 
   return (
     <div className="animate-fade-in text-right" dir="rtl">
-      {/* ── Hero Section ─────────────────────────────────────────── */}
-      <section className="hero-gradient text-white py-20 md:py-24 px-4 text-center relative overflow-hidden">
+      {/* ── Fixed Watermark — truly fixed during scroll ───────────── */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-x-0 bottom-0 pointer-events-none select-none z-[1] flex items-center justify-center"
+        style={{ top: '56px' }}
+      >
+        <img
+          src={logo}
+          alt=""
+          className="w-[72vmin] h-[72vmin] object-contain opacity-[0.09]"
+        />
+      </div>
+
+      {/* ── Hero Section — z-10 so it sits above the fixed watermark ── */}
+      <section className="hero-gradient text-white py-20 md:py-24 px-4 text-center relative z-10 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="relative z-10 max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-black leading-tight">
@@ -208,17 +221,8 @@ export function ServicesHomePage() {
         </div>
       </section>
 
-      {/* ── Main Light Content Area with Watermark Background ── */}
-      <div
-        className="relative bg-white pb-16"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), url(${logo})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: '72vmin',
-          backgroundPosition: 'center 160px',
-          backgroundAttachment: 'fixed',
-        }}
-      >
+      {/* ── Main Light Content Area ── */}
+      <div className="relative bg-white/95 pb-16">
 
         <div className="relative z-10">
           {/* ── Important Links Section ─────────────────────────────────── */}
