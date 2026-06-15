@@ -209,11 +209,16 @@ export function ServicesHomePage() {
       </section>
 
       {/* ── Main Light Content Area with Watermark Background ── */}
-      <div className="relative bg-white overflow-hidden pb-16">
-        {/* Subtle Watermark/Logo Background - Placed in the light main section */}
-        <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none overflow-hidden pt-20">
-          <img src={logo} alt="" className="w-96 h-96 md:w-[600px] md:h-[600px] object-contain opacity-[0.04]" />
-        </div>
+      <div
+        className="relative bg-white pb-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), url(${logo})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '72vmin',
+          backgroundPosition: 'center 160px',
+          backgroundAttachment: 'fixed',
+        }}
+      >
 
         <div className="relative z-10">
           {/* ── Important Links Section ─────────────────────────────────── */}
