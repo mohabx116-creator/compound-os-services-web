@@ -106,6 +106,9 @@ export function PublicServicesShell() {
             {/* Column 1: Brand */}
             <div className="space-y-3">
               <h3 className="font-bold text-base text-white">مجمع الخدمات للمنطقة</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                منصة آمنة لعرض خدمات المنطقة
+              </p>
             </div>
 
             {/* Column 2: Contact/Support */}

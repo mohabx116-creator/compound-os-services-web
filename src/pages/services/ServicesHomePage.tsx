@@ -122,8 +122,6 @@ function ServiceCard({ item }: { item: ServiceItem }) {
   );
 }
 
-
-
 // ── Main Page ───────────────────────────────────────────────────────────────
 
 export function ServicesHomePage() {
@@ -203,10 +201,6 @@ export function ServicesHomePage() {
       {/* ── Hero Section ─────────────────────────────────────────── */}
       <section className="hero-gradient text-white py-20 md:py-24 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        {/* Subtle Watermark/Logo Background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <img src={logo} alt="" className="w-96 h-96 md:w-[480px] md:h-[480px] object-contain opacity-[0.06] transform scale-110" />
-        </div>
         <div className="relative z-10 max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-black leading-tight">
             مجمع الخدمات للمنطقة
@@ -214,158 +208,166 @@ export function ServicesHomePage() {
         </div>
       </section>
 
-      {/* ── Important Links Section ─────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <div className="text-center max-w-xl mx-auto mb-8">
-          <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة</h2>
+      {/* ── Main Light Content Area with Watermark Background ── */}
+      <div className="relative bg-white overflow-hidden pb-16">
+        {/* Subtle Watermark/Logo Background - Placed in the light main section */}
+        <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none overflow-hidden pt-20">
+          <img src={logo} alt="" className="w-96 h-96 md:w-[600px] md:h-[600px] object-contain opacity-[0.04]" />
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {/* Card A: Dalil Subhi */}
-          <a
-            href="https://www.dalilsubhi.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-primary/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
-          >
-            <div className="w-14 h-14 rounded-xl overflow-hidden bg-white flex items-center justify-center border border-outline-variant shrink-0">
-              <img src={logo} alt="دليل السبحي" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <h3 className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors">دليل السبحي</h3>
-              <p className="text-sm text-on-surface-muted mt-1">الصفحة الرئيسية</p>
-            </div>
-          </a>
 
-          {/* Card B: Facebook */}
-          <a
-            href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-blue-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
-          >
-            <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <FacebookIcon />
+        <div className="relative z-10">
+          {/* ── Important Links Section ─────────────────────────────────── */}
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+            <div className="text-center max-w-xl mx-auto mb-8">
+              <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة</h2>
             </div>
-            <div>
-              <h3 className="font-bold text-lg text-on-surface group-hover:text-blue-600 transition-colors">جروب الفيس بوك</h3>
-            </div>
-          </a>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {/* Card 1: WhatsApp */}
+              <a
+                href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-emerald-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
+              >
+                <div className="w-14 h-14 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <MessageCircle size={28} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-on-surface group-hover:text-emerald-600 transition-colors">جروب الواتساب</h3>
+                </div>
+              </a>
 
-          {/* Card C: WhatsApp */}
-          <a
-            href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-emerald-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
-          >
-            <div className="w-14 h-14 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <MessageCircle size={28} />
-            </div>
-            <div>
-              <h3 className="font-bold text-lg text-on-surface group-hover:text-emerald-600 transition-colors">جروب الواتساب</h3>
-            </div>
-          </a>
-        </div>
-      </section>
+              {/* Card 2: Facebook */}
+              <a
+                href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-blue-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
+              >
+                <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <FacebookIcon />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-on-surface group-hover:text-blue-600 transition-colors">جروب الفيس بوك</h3>
+                </div>
+              </a>
 
-      {/* ── Main Content ─────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Tabs switcher */}
-        <div className="flex justify-center mb-10">
-          <div className="inline-flex rounded-xl bg-surface-muted p-1 border border-surface-border">
-            <button
-              onClick={() => setActiveTab('ALL')}
-              className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
-                activeTab === 'ALL'
-                  ? 'bg-white text-on-surface shadow-sm'
-                  : 'text-on-surface-muted hover:text-on-surface'
-              }`}
-            >
-              الكل
-            </button>
-            <button
-              onClick={() => setActiveTab('FACILITY')}
-              className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
-                activeTab === 'FACILITY'
-                  ? 'bg-white text-on-surface shadow-sm'
-                  : 'text-on-surface-muted hover:text-on-surface'
-              }`}
-            >
-              المرافق العامة
-            </button>
-            <button
-              onClick={() => setActiveTab('TECHNICAL')}
-              className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
-                activeTab === 'TECHNICAL'
-                  ? 'bg-white text-on-surface shadow-sm'
-                  : 'text-on-surface-muted hover:text-on-surface'
-              }`}
-            >
-              الخدمات الفنية
-            </button>
+              {/* Card 3: Dalil Subhi */}
+              <a
+                href="https://www.dalilsubhi.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-primary/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
+              >
+                <div className="w-14 h-14 rounded-xl overflow-hidden bg-white flex items-center justify-center border border-outline-variant shrink-0">
+                  <img src={logo} alt="دليل السبحي" className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors">دليل السبحي</h3>
+                  <p className="text-sm text-on-surface-muted mt-1">الصفحة الرئيسية</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          {/* ── Main Content ─────────────────────────────────────────── */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            {/* Tabs switcher */}
+            <div className="flex justify-center mb-10">
+              <div className="inline-flex rounded-xl bg-surface-muted p-1 border border-surface-border">
+                <button
+                  onClick={() => setActiveTab('ALL')}
+                  className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                    activeTab === 'ALL'
+                      ? 'bg-white text-on-surface shadow-sm'
+                      : 'text-on-surface-muted hover:text-on-surface'
+                  }`}
+                >
+                  الكل
+                </button>
+                <button
+                  onClick={() => setActiveTab('FACILITY')}
+                  className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                    activeTab === 'FACILITY'
+                      ? 'bg-white text-on-surface shadow-sm'
+                      : 'text-on-surface-muted hover:text-on-surface'
+                  }`}
+                >
+                  المرافق العامة
+                </button>
+                <button
+                  onClick={() => setActiveTab('TECHNICAL')}
+                  className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                    activeTab === 'TECHNICAL'
+                      ? 'bg-white text-on-surface shadow-sm'
+                      : 'text-on-surface-muted hover:text-on-surface'
+                  }`}
+                >
+                  الخدمات الفنية
+                </button>
+              </div>
+            </div>
+
+            {/* Directory Sections */}
+            <div className="space-y-12">
+              {showFacilities && (
+                <div className="space-y-6">
+                  {activeTab === 'ALL' && hasFacilities && (
+                    <div className="flex items-center gap-2 border-b border-surface-border pb-2">
+                      <Building className="text-accent" size={24} />
+                      <h2 className="text-2xl font-bold text-on-surface">المرافق العامة</h2>
+                    </div>
+                  )}
+                  {hasFacilities ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {data.facilities.map((service) => (
+                        <ServiceCard key={service.id} item={service} />
+                      ))}
+                    </div>
+                  ) : (
+                    activeTab === 'FACILITY' && (
+                      <div className="text-center py-12">
+                        <p className="text-on-surface-muted text-sm">لا توجد مرافق مسجلة حالياً.</p>
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+
+              {showTechnical && (
+                <div className="space-y-6">
+                  {activeTab === 'ALL' && hasTechnical && (
+                    <div className="flex items-center gap-2 border-b border-surface-border pb-2">
+                      <Wrench className="text-accent" size={24} />
+                      <h2 className="text-2xl font-bold text-on-surface">الخدمات الفنية</h2>
+                    </div>
+                  )}
+                  {hasTechnical ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {data.technicalServices.map((service) => (
+                        <ServiceCard key={service.id} item={service} />
+                      ))}
+                    </div>
+                  ) : (
+                    activeTab === 'TECHNICAL' && (
+                      <div className="text-center py-12">
+                        <p className="text-on-surface-muted text-sm">لا توجد خدمات فنية مسجلة حالياً.</p>
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'ALL' && !hasFacilities && !hasTechnical && (
+                <div className="text-center py-20 bg-surface-muted rounded-2xl border border-surface-border">
+                  <p className="text-on-surface-muted font-semibold">الدليل فارغ حالياً. سيتم إضافة الخدمات والمرافق قريباً.</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
-        {/* Directory Sections */}
-        <div className="space-y-12">
-          {showFacilities && (
-            <div className="space-y-6">
-              {activeTab === 'ALL' && hasFacilities && (
-                <div className="flex items-center gap-2 border-b border-surface-border pb-2">
-                  <Building className="text-accent" size={24} />
-                  <h2 className="text-2xl font-bold text-on-surface">المرافق العامة</h2>
-                </div>
-              )}
-              {hasFacilities ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {data.facilities.map((service) => (
-                    <ServiceCard key={service.id} item={service} />
-                  ))}
-                </div>
-              ) : (
-                activeTab === 'FACILITY' && (
-                  <div className="text-center py-12">
-                    <p className="text-on-surface-muted text-sm">لا توجد مرافق مسجلة حالياً.</p>
-                  </div>
-                )
-              )}
-            </div>
-          )}
-
-          {showTechnical && (
-            <div className="space-y-6">
-              {activeTab === 'ALL' && hasTechnical && (
-                <div className="flex items-center gap-2 border-b border-surface-border pb-2">
-                  <Wrench className="text-accent" size={24} />
-                  <h2 className="text-2xl font-bold text-on-surface">الخدمات الفنية</h2>
-                </div>
-              )}
-              {hasTechnical ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {data.technicalServices.map((service) => (
-                    <ServiceCard key={service.id} item={service} />
-                  ))}
-                </div>
-              ) : (
-                activeTab === 'TECHNICAL' && (
-                  <div className="text-center py-12">
-                    <p className="text-on-surface-muted text-sm">لا توجد خدمات فنية مسجلة حالياً.</p>
-                  </div>
-                )
-              )}
-            </div>
-          )}
-
-          {activeTab === 'ALL' && !hasFacilities && !hasTechnical && (
-            <div className="text-center py-20 bg-surface-muted rounded-2xl border border-surface-border">
-              <p className="text-on-surface-muted font-semibold">الدليل فارغ حالياً. سيتم إضافة الخدمات والمرافق قريباً.</p>
-            </div>
-          )}
-        </div>
       </div>
-
-
     </div>
   );
 }
