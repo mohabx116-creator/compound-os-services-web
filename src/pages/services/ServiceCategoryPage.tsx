@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -9,10 +10,12 @@ import {
   Package,
   Building,
 } from 'lucide-react';
-import { staticServices, type StaticService } from '../../data/services';
+import { getItems } from '../../lib/api/services-service';
+import type { ServiceItem } from '../../lib/api/types';
 
-function ItemCard({ item }: { item: StaticService }) {
+function ItemCard({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
+  const coverImage = item.images && item.images.length > 0 ? item.images[0] : null;
 
   return (
     <Link
@@ -21,14 +24,18 @@ function ItemCard({ item }: { item: StaticService }) {
     >
       <div>
         <div className="h-40 bg-gradient-to-br from-accent/5 to-accent/10 flex items-center justify-center relative">
-          <div className="w-12 h-12 rounded-full bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            {isFacility ? <Building size={24} /> : <Wrench size={24} />}
-          </div>
+          {coverImage ? (
+            <img src={coverImage} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              {isFacility ? <Building size={24} /> : <Wrench size={24} />}
+            </div>
+          )}
         </div>
 
         <div className="p-5">
           <h3 className="font-bold text-on-surface mb-2 line-clamp-1">{item.title}</h3>
-          <p className="text-sm text-on-surface-muted mb-3 line-clamp-2">{item.shortDescription}</p>
+          {item.shortDescription && <p className="text-sm text-on-surface-muted mb-3 line-clamp-2">{item.shortDescription}</p>}
 
           <div className="flex flex-wrap gap-3 text-xs text-on-surface-muted">
             {isFacility && item.address && (
@@ -62,23 +69,28 @@ function ItemCard({ item }: { item: StaticService }) {
 
 export function ServiceCategoryPage() {
   const { slug } = useParams<{ slug: string }>();
-
-  // Determine category name and filter criteria
-  let categoryName = '';
-  let categoryDescription = '';
-  let filteredItems: StaticService[] = [];
-
-  if (slug === 'facilities') {
-    categoryName = 'المرافق العامة';
-    categoryDescription = 'استعرض جميع المرافق والمنشآت المتوفرة داخل الكمبوند للخدمة العامة.';
-    filteredItems = staticServices.filter((s) => s.kind === 'FACILITY');
-  } else if (slug === 'technical') {
-    categoryName = 'الخدمات الفنية';
-    categoryDescription = 'تواصل مباشرة مع فنيي الصيانة والأعمال المنزلية المتخصصين بالكمبوند.';
-    filteredItems = staticServices.filter((s) => s.kind === 'TECHNICAL');
-  }
+  const [items, setItems] = useState<ServiceItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const isValidCategory = slug === 'facilities' || slug === 'technical';
+  const kind = slug === 'facilities' ? 'FACILITY' : 'TECHNICAL';
+
+  useEffect(() => {
+    if (!isValidCategory) return;
+    setLoading(true);
+    setError(null);
+    getItems({ kind })
+      .then((res) => {
+        setItems(res.items);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to load items by kind', err);
+        setError('تعذر تحميل عناصر هذا القسم حالياً.');
+        setLoading(false);
+      });
+  }, [slug, isValidCategory, kind]);
 
   if (!isValidCategory) {
     return (
@@ -92,7 +104,7 @@ export function ServiceCategoryPage() {
           </p>
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-dark text-white rounded-xl font-semibold transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent/90 text-white rounded-xl font-semibold transition-colors"
           >
             <ArrowRight size={18} />
             العودة للخدمات
@@ -101,6 +113,51 @@ export function ServiceCategoryPage() {
       </div>
     );
   }
+
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-on-surface-muted text-sm font-semibold">جار التحميل...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center px-4">
+        <div className="text-center space-y-4">
+          <p className="text-on-surface-muted">{error}</p>
+          <button
+            onClick={() => {
+              setLoading(true);
+              setError(null);
+              getItems({ kind })
+                .then((res) => {
+                  setItems(res.items);
+                  setLoading(false);
+                })
+                .catch(() => {
+                  setError('تعذر تحميل عناصر هذا القسم حالياً.');
+                  setLoading(false);
+                });
+            }}
+            className="px-6 py-2 bg-accent text-white font-bold rounded-xl text-xs"
+          >
+            إعادة المحاولة
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Determine category name and filter criteria
+  let categoryName = slug === 'facilities' ? 'المرافق العامة' : 'الخدمات الفنية';
+  let categoryDescription = slug === 'facilities'
+    ? 'استعرض جميع المرافق والمنشآت المتوفرة داخل الكمبوند للخدمة العامة.'
+    : 'تواصل مباشرة مع فنيي الصيانة والأعمال المنزلية المتخصصين بالكمبوند.';
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-in">
@@ -120,7 +177,7 @@ export function ServiceCategoryPage() {
       </div>
 
       {/* Items Grid or Empty */}
-      {filteredItems.length === 0 ? (
+      {items.length === 0 ? (
         <div className="text-center py-20 animate-fade-in">
           <div className="inline-flex p-5 rounded-full bg-surface-muted mb-6">
             <Package size={48} className="text-on-surface-muted" />
@@ -134,7 +191,7 @@ export function ServiceCategoryPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
+          {items.map((item) => (
             <ItemCard key={item.id} item={item} />
           ))}
         </div>

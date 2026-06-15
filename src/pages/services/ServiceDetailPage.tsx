@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   ArrowRight,
@@ -9,27 +10,59 @@ import {
   Building,
   Navigation,
 } from 'lucide-react';
-import { staticServices } from '../../data/services';
+import { getItem } from '../../lib/api/services-service';
+import type { ServiceItem } from '../../lib/api/types';
 
 export function ServiceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
+  const [item, setItem] = useState<ServiceItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
 
-  // Fetch static item
-  const item = staticServices.find((s) => s.slug === slug);
+  useEffect(() => {
+    if (!slug) return;
+    setLoading(true);
+    setError(null);
+    getItem(slug)
+      .then((res) => {
+        setItem(res);
+        if (res.images && res.images.length > 0) {
+          setActiveImage(res.images[0]);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to load item detail', err);
+        setError('تعذر تحميل تفاصيل الخدمة أو المرفق.');
+        setLoading(false);
+      });
+  }, [slug]);
 
-  if (!item) {
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-on-surface-muted text-sm font-semibold">جار التحميل...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !item) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center px-4">
         <div className="text-center animate-fade-in">
           <h2 className="text-2xl font-bold text-on-surface mb-3">
-            الخدمة غير موجودة
+            غير موجود
           </h2>
           <p className="text-on-surface-muted mb-6">
-            عذراً، لم يتم العثور على هذه الخدمة.
+            عذراً، لم يتم العثور على هذه الخدمة أو المرفق، أو حدثت مشكلة في التحميل.
           </p>
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-dark text-white rounded-xl font-semibold transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent/90 text-white rounded-xl font-semibold transition-colors"
           >
             <ArrowRight size={18} />
             العودة للخدمات
@@ -40,6 +73,7 @@ export function ServiceDetailPage() {
   }
 
   const isFacility = item.kind === 'FACILITY';
+  const hasImages = item.images && item.images.length > 0;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-in">
@@ -60,13 +94,42 @@ export function ServiceDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* ── Main Content (2/3) ────────────────────────────────── */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Image */}
-          <div className="rounded-2xl border border-surface-border h-64 md:h-80 bg-gradient-to-br from-accent/5 to-accent/10 flex items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-            <div className="w-20 h-20 rounded-full bg-white/50 text-accent flex items-center justify-center">
-              {isFacility ? <Building size={48} /> : <Wrench size={48} />}
+          {/* Gallery / Image */}
+          {hasImages ? (
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-surface-border h-64 md:h-96 bg-surface-muted overflow-hidden relative">
+                <img
+                  src={activeImage || item.images[0]}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {item.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {item.images.map((imgUrl, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImage(imgUrl)}
+                      className={`w-20 h-14 rounded-lg border overflow-hidden shrink-0 transition-all ${
+                        activeImage === imgUrl
+                          ? 'border-accent ring-2 ring-accent/20'
+                          : 'border-surface-border hover:border-accent'
+                      }`}
+                    >
+                      <img src={imgUrl} alt={`صورة ${idx + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
+          ) : (
+            <div className="rounded-2xl border border-surface-border h-64 md:h-80 bg-gradient-to-br from-accent/5 to-accent/10 flex items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+              <div className="w-20 h-20 rounded-full bg-white/50 text-accent flex items-center justify-center">
+                {isFacility ? <Building size={48} /> : <Wrench size={48} />}
+              </div>
+            </div>
+          )}
 
           {/* Title & Badge */}
           <div>
@@ -120,8 +183,18 @@ export function ServiceDetailPage() {
               <div className="flex items-start gap-3">
                 <Phone size={18} className="text-accent mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-on-surface-muted mb-0.5">الهاتف</p>
+                  <p className="text-xs text-on-surface-muted mb-0.5">رقم الاتصال</p>
                   <p className="text-sm text-on-surface font-semibold" dir="ltr">{item.phone}</p>
+                </div>
+              </div>
+            )}
+
+            {!isFacility && item.whatsapp && (
+              <div className="flex items-start gap-3">
+                <MessageCircle size={18} className="text-accent mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-xs text-on-surface-muted mb-0.5">رقم الواتساب</p>
+                  <p className="text-sm text-on-surface font-semibold" dir="ltr">{item.whatsapp}</p>
                 </div>
               </div>
             )}
@@ -134,7 +207,7 @@ export function ServiceDetailPage() {
                 href={item.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-accent hover:bg-accent-dark text-white rounded-xl font-bold transition-colors"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-colors"
               >
                 <Navigation size={18} />
                 فتح على Google Maps
@@ -144,7 +217,7 @@ export function ServiceDetailPage() {
             {!isFacility && item.phone && (
               <a
                 href={`tel:${item.phone}`}
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-primary hover:bg-primary-light text-white rounded-xl font-bold transition-colors"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-primary hover:bg-primary/95 text-white rounded-xl font-bold transition-colors"
               >
                 <Phone size={18} />
                 اتصال مباشر
@@ -159,7 +232,7 @@ export function ServiceDetailPage() {
                 className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors"
               >
                 <MessageCircle size={18} />
-                واتساب
+                تواصل عبر واتساب
               </a>
             )}
           </div>
