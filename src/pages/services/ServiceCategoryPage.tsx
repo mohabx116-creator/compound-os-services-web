@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -8,63 +7,54 @@ import {
   Phone,
   Wrench,
   Package,
-  Loader2,
+  Building,
 } from 'lucide-react';
-import { getCategory } from '../../lib/api/services-service';
-import type { ServiceItem } from '../../lib/api/types';
+import { staticServices, type StaticService } from '../../data/services';
 
-function ItemCard({ item }: { item: ServiceItem }) {
+function ItemCard({ item }: { item: StaticService }) {
+  const isFacility = item.kind === 'FACILITY';
+
   return (
     <Link
       to={`/services/items/${item.slug}`}
-      className="service-card overflow-hidden group"
+      className="service-card overflow-hidden group flex flex-col justify-between h-full"
     >
-      {item.imageUrl ? (
-        <div className="h-40 overflow-hidden">
-          <img
-            src={item.imageUrl}
-            alt={item.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      ) : (
-        <div className="h-40 bg-gradient-to-br from-accent/5 to-accent/10 flex items-center justify-center">
-          <Wrench size={40} className="text-accent/30" />
-        </div>
-      )}
-
-      <div className="p-5">
-        <h3 className="font-semibold text-on-surface mb-2 line-clamp-1">{item.title}</h3>
-        {item.description && (
-          <p className="text-sm text-on-surface-muted mb-3 line-clamp-2">{item.description}</p>
-        )}
-
-        <div className="flex flex-wrap gap-3 text-xs text-on-surface-muted">
-          {item.locationText && (
-            <span className="flex items-center gap-1">
-              <MapPin size={12} /> {item.locationText}
-            </span>
-          )}
-          {item.workingHours && (
-            <span className="flex items-center gap-1">
-              <Clock size={12} /> {item.workingHours}
-            </span>
-          )}
-          {item.phone && (
-            <span className="flex items-center gap-1">
-              <Phone size={12} /> {item.phone}
-            </span>
-          )}
-        </div>
-
-        {item.acceptsRequests && (
-          <div className="mt-3 pt-3 border-t border-surface-border">
-            <span className="text-xs text-accent font-medium flex items-center gap-1">
-              يقبل الطلبات
-              <ArrowLeft size={14} />
-            </span>
+      <div>
+        <div className="h-40 bg-gradient-to-br from-accent/5 to-accent/10 flex items-center justify-center relative">
+          <div className="w-12 h-12 rounded-full bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            {isFacility ? <Building size={24} /> : <Wrench size={24} />}
           </div>
-        )}
+        </div>
+
+        <div className="p-5">
+          <h3 className="font-bold text-on-surface mb-2 line-clamp-1">{item.title}</h3>
+          <p className="text-sm text-on-surface-muted mb-3 line-clamp-2">{item.shortDescription}</p>
+
+          <div className="flex flex-wrap gap-3 text-xs text-on-surface-muted">
+            {isFacility && item.address && (
+              <span className="flex items-center gap-1">
+                <MapPin size={12} /> {item.address}
+              </span>
+            )}
+            {item.workingHours && (
+              <span className="flex items-center gap-1">
+                <Clock size={12} /> {item.workingHours}
+              </span>
+            )}
+            {!isFacility && item.phone && (
+              <span className="flex items-center gap-1">
+                <Phone size={12} /> {item.phone}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-5 pt-0 mt-auto border-t border-surface-border/50">
+        <span className="mt-3 text-xs text-accent font-medium flex items-center gap-1">
+          عرض التفاصيل
+          <ArrowLeft size={14} />
+        </span>
       </div>
     </Link>
   );
@@ -73,21 +63,24 @@ function ItemCard({ item }: { item: ServiceItem }) {
 export function ServiceCategoryPage() {
   const { slug } = useParams<{ slug: string }>();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['services', 'category', slug],
-    queryFn: () => getCategory(slug!),
-    enabled: !!slug,
-  });
+  // Determine category name and filter criteria
+  let categoryName = '';
+  let categoryDescription = '';
+  let filteredItems: StaticService[] = [];
 
-  if (isLoading) {
-    return (
-      <div className="min-h-[50vh] flex items-center justify-center">
-        <Loader2 size={32} className="animate-spin text-accent" />
-      </div>
-    );
+  if (slug === 'facilities') {
+    categoryName = 'المرافق العامة';
+    categoryDescription = 'استعرض جميع المرافق والمنشآت المتوفرة داخل الكمبوند للخدمة العامة.';
+    filteredItems = staticServices.filter((s) => s.kind === 'FACILITY');
+  } else if (slug === 'technical') {
+    categoryName = 'الخدمات الفنية';
+    categoryDescription = 'تواصل مباشرة مع فنيي الصيانة والأعمال المنزلية المتخصصين بالكمبوند.';
+    filteredItems = staticServices.filter((s) => s.kind === 'TECHNICAL');
   }
 
-  if (isError || !data) {
+  const isValidCategory = slug === 'facilities' || slug === 'technical';
+
+  if (!isValidCategory) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center px-4">
         <div className="text-center animate-fade-in">
@@ -109,27 +102,25 @@ export function ServiceCategoryPage() {
     );
   }
 
-  const { category, items } = data;
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-in">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-on-surface-muted mb-6">
         <Link to="/services" className="hover:text-accent transition-colors">الخدمات</Link>
         <span>/</span>
-        <span className="text-on-surface font-medium">{category.name}</span>
+        <span className="text-on-surface font-medium">{categoryName}</span>
       </nav>
 
       {/* Category Header */}
       <div className="mb-10">
-        <h1 className="text-3xl font-bold text-on-surface mb-3">{category.name}</h1>
-        {category.description && (
-          <p className="text-on-surface-muted text-lg max-w-2xl">{category.description}</p>
+        <h1 className="text-3xl font-black text-on-surface mb-3">{categoryName}</h1>
+        {categoryDescription && (
+          <p className="text-on-surface-muted text-lg max-w-2xl">{categoryDescription}</p>
         )}
       </div>
 
       {/* Items Grid or Empty */}
-      {items.length === 0 ? (
+      {filteredItems.length === 0 ? (
         <div className="text-center py-20 animate-fade-in">
           <div className="inline-flex p-5 rounded-full bg-surface-muted mb-6">
             <Package size={48} className="text-on-surface-muted" />
@@ -143,7 +134,7 @@ export function ServiceCategoryPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <ItemCard key={item.id} item={item} />
           ))}
         </div>
