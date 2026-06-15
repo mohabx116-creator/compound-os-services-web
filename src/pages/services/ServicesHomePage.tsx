@@ -199,25 +199,25 @@ export function ServicesHomePage() {
   const hasTechnical = data.technicalServices.length > 0;
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in text-right" dir="rtl">
       {/* ── Hero Section ─────────────────────────────────────────── */}
       <section className="hero-gradient text-white py-20 md:py-24 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        {/* Subtle Watermark/Logo Background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+          <img src={logo} alt="" className="w-96 h-96 md:w-[480px] md:h-[480px] object-contain opacity-[0.06] transform scale-110" />
+        </div>
         <div className="relative z-10 max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-black leading-tight mb-5">
+          <h1 className="text-3xl md:text-5xl font-black leading-tight">
             مجمع الخدمات للمنطقة
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            دليل خدمات المنطقة لتصفح المرافق والتواصل المباشر.
-          </p>
         </div>
       </section>
 
       {/* ── Important Links Section ─────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="text-center max-w-xl mx-auto mb-8">
-          <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة للمنطقة</h2>
-          <p className="text-sm text-on-surface-muted mt-2">تابع أخبار المنطقة وتواصل معنا من خلال الروابط الرسمية.</p>
+          <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -226,20 +226,15 @@ export function ServicesHomePage() {
             href="https://www.dalilsubhi.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-4 bg-surface-container-low border border-surface-border rounded-2xl hover:border-primary/50 hover:bg-surface-container-high transition-all group shadow-sm text-right"
+            className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-primary/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl overflow-hidden bg-white flex items-center justify-center border border-outline-variant shrink-0">
-                <img src={logo} alt="دليل السبحي" className="w-full h-full object-cover" />
-              </div>
-              <div>
-                <h3 className="font-bold text-base text-on-surface group-hover:text-primary transition-colors">دليل السبحي</h3>
-                <p className="text-xs text-on-surface-muted mt-0.5">الصفحة الرئيسية للمنصة</p>
-              </div>
+            <div className="w-14 h-14 rounded-xl overflow-hidden bg-white flex items-center justify-center border border-outline-variant shrink-0">
+              <img src={logo} alt="دليل السبحي" className="w-full h-full object-cover" />
             </div>
-            <span className="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:-translate-x-1" style={{ fontSize: '20px' }}>
-              arrow_back
-            </span>
+            <div>
+              <h3 className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors">دليل السبحي</h3>
+              <p className="text-sm text-on-surface-muted mt-1">الصفحة الرئيسية</p>
+            </div>
           </a>
 
           {/* Card B: Facebook */}
@@ -247,20 +242,14 @@ export function ServicesHomePage() {
             href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-4 bg-surface-container-low border border-surface-border rounded-2xl hover:border-blue-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-right"
+            className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-blue-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                <FacebookIcon />
-              </div>
-              <div>
-                <h3 className="font-bold text-base text-on-surface group-hover:text-blue-600 transition-colors">جروب الفيس بوك</h3>
-                <p className="text-xs text-on-surface-muted mt-0.5">تواصل مع سكان المنطقة</p>
-              </div>
+            <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <FacebookIcon />
             </div>
-            <span className="material-symbols-outlined text-outline group-hover:text-blue-600 transition-transform group-hover:-translate-x-1" style={{ fontSize: '20px' }}>
-              arrow_back
-            </span>
+            <div>
+              <h3 className="font-bold text-lg text-on-surface group-hover:text-blue-600 transition-colors">جروب الفيس بوك</h3>
+            </div>
           </a>
 
           {/* Card C: WhatsApp */}
@@ -268,20 +257,14 @@ export function ServicesHomePage() {
             href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-4 bg-surface-container-low border border-surface-border rounded-2xl hover:border-emerald-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-right"
+            className="flex flex-col items-center justify-center p-6 bg-surface-container-low border border-surface-border rounded-2xl hover:border-emerald-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-center gap-3 h-full"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                <MessageCircle size={24} />
-              </div>
-              <div>
-                <h3 className="font-bold text-base text-on-surface group-hover:text-emerald-600 transition-colors">جروب الواتساب</h3>
-                <p className="text-xs text-on-surface-muted mt-0.5">مجموعة المراسلة الفورية للمنطقة</p>
-              </div>
+            <div className="w-14 h-14 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <MessageCircle size={28} />
             </div>
-            <span className="material-symbols-outlined text-outline group-hover:text-emerald-600 transition-transform group-hover:-translate-x-1" style={{ fontSize: '20px' }}>
-              arrow_back
-            </span>
+            <div>
+              <h3 className="font-bold text-lg text-on-surface group-hover:text-emerald-600 transition-colors">جروب الواتساب</h3>
+            </div>
           </a>
         </div>
       </section>

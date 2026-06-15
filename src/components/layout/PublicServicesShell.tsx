@@ -26,10 +26,9 @@ export function PublicServicesShell() {
               </div>
               <div className="leading-tight">
                 <div className="font-bold text-base tracking-wide">مجمع الخدمات للمنطقة</div>
-                <div className="text-xs text-gray-300">دليل خدمات المنطقة</div>
               </div>
             </Link>
-
+            
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
@@ -107,17 +106,11 @@ export function PublicServicesShell() {
             {/* Column 1: Brand */}
             <div className="space-y-3">
               <h3 className="font-bold text-base text-white">مجمع الخدمات للمنطقة</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                منصة آمنة لعرض خدمات المنطقة.
-              </p>
             </div>
 
             {/* Column 2: Contact/Support */}
             <div className="space-y-3">
               <h3 className="font-bold text-base text-white">للتواصل والدعم</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                يمكنكم التواصل من خلال جروب الواتساب أو جروب الفيس بوك.
-              </p>
               <div className="flex flex-col gap-2 mt-2">
                 <a
                   href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
@@ -180,7 +173,7 @@ export function PublicServicesShell() {
 
           <div className="border-t border-white/10 mt-8 pt-6 text-center">
             <p className="text-xs text-gray-500">
-              © {new Date().getFullYear()} مجمع الخدمات للمنطقة. جميع الحقوق محفوظة.
+              © 2026 مجمع الخدمات للمنطقة
             </p>
           </div>
         </div>
