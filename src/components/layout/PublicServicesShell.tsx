@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X, Wrench } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import logo from '../../assets/dalil-subhi-logo.jpg';
 
 const navLinks = [
   { label: 'الرئيسية', href: '/' },
@@ -20,12 +21,12 @@ export function PublicServicesShell() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center transition-transform group-hover:scale-105">
-                <Wrench size={20} className="text-white" />
+              <div className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105 bg-white">
+                <img src={logo} alt="مجمع الخدمات للمنطقة" className="w-full h-full object-cover" />
               </div>
               <div className="leading-tight">
-                <div className="font-bold text-sm tracking-wide">Black Horse Services</div>
-                <div className="text-xs text-gray-300">دليل الخدمات والمرافق</div>
+                <div className="font-bold text-base tracking-wide">مجمع الخدمات للمنطقة</div>
+                <div className="text-xs text-gray-300">دليل خدمات المنطقة</div>
               </div>
             </Link>
 
@@ -100,50 +101,86 @@ export function PublicServicesShell() {
       </main>
 
       {/* ── Footer ─────────────────────────────────────────────────── */}
-      <footer className="bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Brand */}
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
-                  <Wrench size={20} className="text-white" />
-                </div>
-                <div>
-                  <div className="font-bold text-sm">Black Horse Services</div>
-                  <div className="text-xs text-gray-400">دليل الخدمات والمرافق</div>
-                </div>
-              </div>
+      <footer className="bg-primary text-white border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-right" dir="rtl">
+            {/* Column 1: Brand */}
+            <div className="space-y-3">
+              <h3 className="font-bold text-base text-white">مجمع الخدمات للمنطقة</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                منصة متكاملة لعرض جميع مرافق وخدمات الكمبوند وتسهيل الوصول إليها.
+                منصة آمنة لعرض خدمات المنطقة.
               </p>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4">روابط سريعة</h3>
-              <ul className="space-y-2">
+            {/* Column 2: Contact/Support */}
+            <div className="space-y-3">
+              <h3 className="font-bold text-base text-white">للتواصل والدعم</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                يمكنكم التواصل من خلال جروب الواتساب أو جروب الفيس بوك.
+              </p>
+              <div className="flex flex-col gap-2 mt-2">
+                <a
+                  href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors w-fit"
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  جروب الواتساب
+                </a>
+                <a
+                  href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors w-fit"
+                >
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  جروب الفيس بوك
+                </a>
+              </div>
+            </div>
+
+            {/* Column 3: Important Links */}
+            <div className="space-y-3">
+              <h3 className="font-bold text-base text-white">روابط مهمة</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
                 <li>
-                  <Link to="/" className="text-sm text-gray-400 hover:text-accent transition-colors">الرئيسية</Link>
+                  <a
+                    href="https://www.dalilsubhi.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent transition-colors"
+                  >
+                    الصفحة الرئيسية
+                  </a>
                 </li>
                 <li>
-                  <Link to="/services" className="text-sm text-gray-400 hover:text-accent transition-colors">جميع الخدمات</Link>
+                  <a
+                    href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent transition-colors"
+                  >
+                    جروب الواتساب
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent transition-colors"
+                  >
+                    جروب الفيس بوك
+                  </a>
                 </li>
               </ul>
             </div>
-
-            {/* Info */}
-            <div>
-              <h3 className="font-semibold text-sm mb-4">تواصل معنا</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                للاستفسارات والمقترحات تواصل مع إدارة الكمبوند.
-              </p>
-            </div>
           </div>
 
-          <div className="border-t border-white/10 mt-8 pt-8 text-center">
+          <div className="border-t border-white/10 mt-8 pt-6 text-center">
             <p className="text-xs text-gray-500">
-              © {new Date().getFullYear()} Black Horse Compound. جميع الحقوق محفوظة.
+              © {new Date().getFullYear()} مجمع الخدمات للمنطقة. جميع الحقوق محفوظة.
             </p>
           </div>
         </div>

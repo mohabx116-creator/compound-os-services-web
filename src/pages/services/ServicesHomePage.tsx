@@ -6,13 +6,27 @@ import {
   Phone,
   MessageCircle,
   Wrench,
-  Search,
-  BookOpen,
-  CheckCircle,
   Building,
 } from 'lucide-react';
 import { getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem } from '../../lib/api/types';
+import logo from '../../assets/dalil-subhi-logo.jpg';
+
+const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    stroke="currentColor"
+    strokeWidth="2"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
 
 // ── Service Item Card ───────────────────────────────────────────────────────
 
@@ -108,28 +122,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
   );
 }
 
-// ── How It Works ────────────────────────────────────────────────────────────
 
-const steps = [
-  {
-    num: '١',
-    title: 'تصفح الدليل',
-    desc: 'استعرض قائمة المرافق والخدمات المتاحة بالكمبوند.',
-    icon: Search,
-  },
-  {
-    num: '٢',
-    title: 'تعرف على التفاصيل',
-    desc: 'اطلع على مواعيد العمل، العناوين، والتفاصيل الخدمية.',
-    icon: BookOpen,
-  },
-  {
-    num: '٣',
-    title: 'تواصل مباشر',
-    desc: 'اتصل أو راسل الفنيين مباشرة للحصول على الخدمة.',
-    icon: CheckCircle,
-  },
-];
 
 // ── Main Page ───────────────────────────────────────────────────────────────
 
@@ -212,16 +205,89 @@ export function ServicesHomePage() {
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="relative z-10 max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-black leading-tight mb-5">
-            دليل الخدمات والمرافق
+            مجمع الخدمات للمنطقة
           </h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            كل مرافق وخدمات Black Horse في مكان واحد للتصفح والتواصل المباشر.
+            دليل خدمات المنطقة لتصفح المرافق والتواصل المباشر.
           </p>
         </div>
       </section>
 
+      {/* ── Important Links Section ─────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <div className="text-center max-w-xl mx-auto mb-8">
+          <h2 className="text-2xl md:text-3xl font-black text-on-surface">روابط مهمة للمنطقة</h2>
+          <p className="text-sm text-on-surface-muted mt-2">تابع أخبار المنطقة وتواصل معنا من خلال الروابط الرسمية.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {/* Card A: Dalil Subhi */}
+          <a
+            href="https://www.dalilsubhi.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-4 bg-surface-container-low border border-surface-border rounded-2xl hover:border-primary/50 hover:bg-surface-container-high transition-all group shadow-sm text-right"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl overflow-hidden bg-white flex items-center justify-center border border-outline-variant shrink-0">
+                <img src={logo} alt="دليل السبحي" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-on-surface group-hover:text-primary transition-colors">دليل السبحي</h3>
+                <p className="text-xs text-on-surface-muted mt-0.5">الصفحة الرئيسية للمنصة</p>
+              </div>
+            </div>
+            <span className="material-symbols-outlined text-outline group-hover:text-primary transition-transform group-hover:-translate-x-1" style={{ fontSize: '20px' }}>
+              arrow_back
+            </span>
+          </a>
+
+          {/* Card B: Facebook */}
+          <a
+            href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-4 bg-surface-container-low border border-surface-border rounded-2xl hover:border-blue-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-right"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <FacebookIcon />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-on-surface group-hover:text-blue-600 transition-colors">جروب الفيس بوك</h3>
+                <p className="text-xs text-on-surface-muted mt-0.5">تواصل مع سكان المنطقة</p>
+              </div>
+            </div>
+            <span className="material-symbols-outlined text-outline group-hover:text-blue-600 transition-transform group-hover:-translate-x-1" style={{ fontSize: '20px' }}>
+              arrow_back
+            </span>
+          </a>
+
+          {/* Card C: WhatsApp */}
+          <a
+            href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-4 bg-surface-container-low border border-surface-border rounded-2xl hover:border-emerald-500/50 hover:bg-surface-container-high transition-all group shadow-sm text-right"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <MessageCircle size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-on-surface group-hover:text-emerald-600 transition-colors">جروب الواتساب</h3>
+                <p className="text-xs text-on-surface-muted mt-0.5">مجموعة المراسلة الفورية للمنطقة</p>
+              </div>
+            </div>
+            <span className="material-symbols-outlined text-outline group-hover:text-emerald-600 transition-transform group-hover:-translate-x-1" style={{ fontSize: '20px' }}>
+              arrow_back
+            </span>
+          </a>
+        </div>
+      </section>
+
       {/* ── Main Content ─────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Tabs switcher */}
         <div className="flex justify-center mb-10">
           <div className="inline-flex rounded-xl bg-surface-muted p-1 border border-surface-border">
@@ -316,29 +382,7 @@ export function ServicesHomePage() {
         </div>
       </div>
 
-      {/* ── How It Works ─────────────────────────────────────────── */}
-      <section className="bg-primary text-white py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-center mb-12">كيف يعمل الدليل؟</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((step) => {
-              const Icon = step.icon;
-              return (
-                <div key={step.num} className="text-center group">
-                  <div className="w-16 h-16 rounded-full bg-white/10 text-accent flex items-center justify-center mx-auto mb-4 relative">
-                    <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-accent text-white text-xs font-bold flex items-center justify-center">
-                      {step.num}
-                    </span>
-                    <Icon size={28} />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
-                  <p className="text-sm text-gray-300 leading-relaxed">{step.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }
