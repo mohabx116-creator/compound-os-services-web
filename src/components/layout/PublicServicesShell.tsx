@@ -48,7 +48,7 @@ export function PublicServicesShell() {
                 to="/services"
                 className="mr-2 px-5 py-2 bg-accent hover:bg-accent-dark rounded-lg text-sm font-semibold transition-colors"
               >
-                طلب خدمة
+                تصفح الخدمات
               </Link>
             </nav>
 
@@ -87,7 +87,7 @@ export function PublicServicesShell() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-4 py-3 bg-accent hover:bg-accent-dark rounded-lg text-sm font-semibold text-center transition-colors"
               >
-                طلب خدمة
+                تصفح الخدمات
               </Link>
             </div>
           </div>
@@ -115,7 +115,7 @@ export function PublicServicesShell() {
                 </div>
               </div>
               <p className="text-sm text-gray-400 leading-relaxed">
-                منصة متكاملة لعرض جميع مرافق وخدمات الكمبوند وتسهيل طلب الخدمات الفنية.
+                منصة متكاملة لعرض جميع مرافق وخدمات الكمبوند وتسهيل الوصول إليها.
               </p>
             </div>
 
