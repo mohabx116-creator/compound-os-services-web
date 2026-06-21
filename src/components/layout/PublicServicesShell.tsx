@@ -170,6 +170,14 @@ export function PublicServicesShell() {
                     جروب الفيس بوك
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="https://dalilsubhi.com/publishing-policy"
+                    className="hover:text-accent transition-colors"
+                  >
+                    سياسة النشر والإعلان
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
