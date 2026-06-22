@@ -44,6 +44,12 @@ export function PublicServicesShell() {
                   {link.label}
                 </Link>
               ))}
+              <a
+                href="https://dalilsubhi.com/"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-gray-300 hover:text-white hover:bg-white/5"
+              >
+                دليل السبحي
+              </a>
               <Link
                 to="/services"
                 className="mr-2 px-5 py-2 bg-accent hover:bg-accent-dark rounded-lg text-sm font-semibold transition-colors"
@@ -82,6 +88,13 @@ export function PublicServicesShell() {
                   {link.label}
                 </Link>
               ))}
+              <a
+                href="https://dalilsubhi.com/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-lg text-sm font-medium transition-colors text-gray-300 hover:text-white hover:bg-white/5"
+              >
+                دليل السبحي
+              </a>
               <Link
                 to="/services"
                 onClick={() => setMobileMenuOpen(false)}
