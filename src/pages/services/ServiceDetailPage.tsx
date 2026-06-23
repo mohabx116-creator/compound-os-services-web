@@ -73,7 +73,18 @@ export function ServiceDetailPage() {
   }
 
   const isFacility = item.kind === 'FACILITY';
+  const isRealEstate = item.serviceType === 'REAL_ESTATE';
   const hasImages = item.images && item.images.length > 0;
+  const categoryHref = isFacility
+    ? '/services/categories/facilities'
+    : isRealEstate
+      ? '/services#real-estate-services'
+      : '/services/categories/technical';
+  const categoryLabel = isFacility
+    ? 'المرافق العامة'
+    : isRealEstate
+      ? 'خدمة العقارات'
+      : 'الخدمات الفنية';
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-in">
@@ -82,10 +93,10 @@ export function ServiceDetailPage() {
         <Link to="/services" className="hover:text-accent transition-colors">الخدمات</Link>
         <span>/</span>
         <Link
-          to={`/services/categories/${isFacility ? 'facilities' : 'technical'}`}
+          to={categoryHref}
           className="hover:text-accent transition-colors"
         >
-          {isFacility ? 'المرافق العامة' : 'الخدمات الفنية'}
+          {categoryLabel}
         </Link>
         <span>/</span>
         <span className="text-on-surface font-medium">{item.title}</span>
@@ -134,9 +145,13 @@ export function ServiceDetailPage() {
           {/* Title & Badge */}
           <div>
             <span className={`inline-block px-3 py-1 rounded-lg text-sm font-semibold mb-3 ${
-              isFacility ? 'bg-accent/10 text-accent' : 'bg-primary/10 text-primary'
+              isFacility
+                ? 'bg-accent/10 text-accent'
+                : isRealEstate
+                  ? 'bg-secondary/10 text-secondary'
+                  : 'bg-primary/10 text-primary'
             }`}>
-              {isFacility ? 'مرفق عام' : 'خدمة فنية'}
+              {categoryLabel}
             </span>
             <h1 className="text-3xl font-black text-on-surface">{item.title}</h1>
           </div>

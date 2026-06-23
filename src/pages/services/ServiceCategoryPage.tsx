@@ -15,7 +15,9 @@ import type { ServiceItem } from '../../lib/api/types';
 
 function ItemCard({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
+  const isRealEstate = item.serviceType === 'REAL_ESTATE';
   const coverImage = item.images && item.images.length > 0 ? item.images[0] : null;
+  const badgeLabel = isFacility ? 'مرفق' : isRealEstate ? 'خدمة عقارية' : 'خدمة فنية';
 
   return (
     <Link
@@ -34,6 +36,11 @@ function ItemCard({ item }: { item: ServiceItem }) {
         </div>
 
         <div className="p-5">
+          <span className={`inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold mb-3 ${
+            isFacility ? 'bg-accent/10 text-accent' : isRealEstate ? 'bg-secondary/10 text-secondary' : 'bg-primary/10 text-primary'
+          }`}>
+            {badgeLabel}
+          </span>
           <h3 className="font-bold text-on-surface mb-2 line-clamp-1">{item.title}</h3>
           {item.shortDescription && <p className="text-sm text-on-surface-muted mb-3 line-clamp-2">{item.shortDescription}</p>}
 
@@ -75,12 +82,13 @@ export function ServiceCategoryPage() {
 
   const isValidCategory = slug === 'facilities' || slug === 'technical';
   const kind = slug === 'facilities' ? 'FACILITY' : 'TECHNICAL';
+  const serviceType = slug === 'technical' ? 'TECHNICAL' : undefined;
 
   useEffect(() => {
     if (!isValidCategory) return;
     setLoading(true);
     setError(null);
-    getItems({ kind })
+    getItems({ kind, serviceType })
       .then((res) => {
         setItems(res.items);
         setLoading(false);
@@ -90,7 +98,7 @@ export function ServiceCategoryPage() {
         setError('تعذر تحميل عناصر هذا القسم حالياً.');
         setLoading(false);
       });
-  }, [slug, isValidCategory, kind]);
+  }, [slug, isValidCategory, kind, serviceType]);
 
   if (!isValidCategory) {
     return (
@@ -134,7 +142,7 @@ export function ServiceCategoryPage() {
             onClick={() => {
               setLoading(true);
               setError(null);
-              getItems({ kind })
+              getItems({ kind, serviceType })
                 .then((res) => {
                   setItems(res.items);
                   setLoading(false);

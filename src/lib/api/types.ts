@@ -1,6 +1,7 @@
 export interface ServiceItem {
   id: string;
   kind: 'FACILITY' | 'TECHNICAL';
+  serviceType: 'TECHNICAL' | 'REAL_ESTATE';
   title: string;
   slug: string;
   shortDescription?: string | null;
@@ -24,6 +25,7 @@ export interface ServiceItem {
 export interface ServicesHomeResponse {
   facilities: ServiceItem[];
   technicalServices: ServiceItem[];
+  realEstateServices: ServiceItem[];
   featured: ServiceItem[];
 }
 

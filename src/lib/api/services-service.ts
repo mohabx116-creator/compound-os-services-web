@@ -27,6 +27,7 @@ export async function getItems(params?: {
   page?: number;
   limit?: number;
   kind?: 'FACILITY' | 'TECHNICAL';
+  serviceType?: 'TECHNICAL' | 'REAL_ESTATE';
   featured?: boolean;
   search?: string;
 }): Promise<{ items: ServiceItem[]; meta: PaginatedApiResponse<ServiceItem>['meta'] }> {
