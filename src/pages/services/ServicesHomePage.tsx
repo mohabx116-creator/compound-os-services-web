@@ -1,4 +1,4 @@
-import { memo, startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, startTransition, useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode, SVGProps, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -12,6 +12,7 @@ import {
 import { getCachedServicesHome, getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
 import { ROUTES } from '../../lib/constants/routes';
+import { SERVICES_HOME_FALLBACK } from '../../data/services-home-fallback';
 import logo from '../../assets/dalil-subhi-logo-192.jpg';
 
 const sectionCopy = {
@@ -34,14 +35,13 @@ const sectionCopy = {
 
 const SERVICES_ERROR_MESSAGE =
   'ØªØ¹Ø°Ø± ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¯Ù„ÙŠÙ„ Ø­Ø§Ù„ÙŠØ§Ù‹. ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„Ø§ØªØµØ§Ù„ Ø¨Ø§Ù„Ø®Ø§Ø¯Ù….';
-const SKELETON_SECTION_KEYS = ['facilities', 'technical', 'realEstate'] as const;
-const SKELETON_CARD_KEYS = [0, 1, 2, 3] as const;
-const EMPTY_SERVICES_HOME: ServicesHomeResponse = {
-  facilities: [],
-  technicalServices: [],
-  realEstateServices: [],
-  featured: [],
-};
+type ServicesHomeDataSource = 'cache' | 'fallback' | 'api';
+
+interface ServicesHomeState {
+  data: ServicesHomeResponse;
+  error: string | null;
+  source: ServicesHomeDataSource;
+}
 
 function getOptimizedServiceImageUrl(url: string) {
   if (!url.includes('/image/upload/')) {
@@ -57,11 +57,12 @@ function hideBrokenImage(event: SyntheticEvent<HTMLImageElement>) {
 
 function createInitialServicesState() {
   const cached = getCachedServicesHome();
+  const source: ServicesHomeDataSource = cached ? 'cache' : 'fallback';
 
   return {
-    data: cached,
-    loading: !cached,
+    data: cached ?? SERVICES_HOME_FALLBACK,
     error: null as string | null,
+    source,
   };
 }
 
@@ -187,37 +188,6 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
 
 const ServiceCard = memo(ServiceCardView);
 
-function ServiceCardSkeletonView() {
-  return (
-    <div className="service-card flex h-full flex-col justify-between overflow-hidden">
-      <div>
-        <div className="h-44 bg-surface-muted" />
-        <div className="space-y-4 p-5">
-          <div className="inline-block h-5 w-20 rounded-md bg-surface-muted" />
-          <div className="space-y-2">
-            <div className="h-5 w-3/4 rounded bg-surface-muted" />
-            <div className="h-4 w-full rounded bg-surface-muted" />
-            <div className="h-4 w-5/6 rounded bg-surface-muted" />
-          </div>
-          <div className="space-y-2">
-            <div className="h-4 w-1/2 rounded bg-surface-muted" />
-            <div className="h-4 w-2/3 rounded bg-surface-muted" />
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-auto border-t border-surface-border/50 p-5 pt-0">
-        <div className="mt-4 flex gap-2">
-          <div className="h-10 flex-1 rounded-lg bg-surface-muted" />
-          <div className="h-10 flex-1 rounded-lg bg-surface-muted" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const ServiceCardSkeleton = memo(ServiceCardSkeletonView);
-
 function ServicesSectionView({
   id,
   title,
@@ -252,32 +222,30 @@ function ServicesSectionView({
 const ServicesSection = memo(ServicesSectionView);
 
 export function ServicesHomePage() {
-  const [state, setState] = useState(createInitialServicesState);
-  const hadCachedDataOnMount = useRef(state.data !== null);
-  const { data, loading, error } = state;
+  const [state, setState] = useState<ServicesHomeState>(createInitialServicesState);
+  const initialSource = useRef(state.source);
+  const { data, error } = state;
   useEffect(() => {
     let isActive = true;
 
-    getServicesHome({ bypassCache: hadCachedDataOnMount.current })
+    getServicesHome({ bypassCache: initialSource.current === 'cache' })
       .then((res) => {
         if (!isActive) {
           return;
         }
 
         startTransition(() => {
-          setState({ data: res, loading: false, error: null });
+          setState({ data: res, error: null, source: 'api' });
         });
       })
-      .catch((err) => {
+      .catch(() => {
         if (!isActive) {
           return;
         }
 
-        console.error('Failed to load services', err);
         setState((current) => ({
-          data: current.data,
-          loading: false,
-          error: current.data ? null : SERVICES_ERROR_MESSAGE,
+          ...current,
+          error: SERVICES_ERROR_MESSAGE,
         }));
       });
 
@@ -286,34 +254,24 @@ export function ServicesHomePage() {
     };
   }, []);
 
-  const isInitialLoading = loading && !data;
-  const facilities = useMemo(() => data?.facilities ?? EMPTY_SERVICES_HOME.facilities, [data]);
-  const technicalServices = useMemo(
-    () => data?.technicalServices ?? EMPTY_SERVICES_HOME.technicalServices,
-    [data],
-  );
-  const realEstateServices = useMemo(
-    () => data?.realEstateServices ?? EMPTY_SERVICES_HOME.realEstateServices,
-    [data],
-  );
-  const hasAnyServices = useMemo(() => {
-    return facilities.length > 0 || technicalServices.length > 0 || realEstateServices.length > 0;
-  }, [facilities, technicalServices, realEstateServices]);
+  const facilities = data.facilities;
+  const technicalServices = data.technicalServices;
+  const realEstateServices = data.realEstateServices;
+  const hasAnyServices =
+    facilities.length > 0 || technicalServices.length > 0 || realEstateServices.length > 0;
 
   const handleRetry = useCallback(() => {
-    setState((current) => ({ ...current, loading: true, error: null }));
+    setState((current) => ({ ...current, error: null }));
     getServicesHome({ bypassCache: true })
       .then((res) => {
         startTransition(() => {
-          setState({ data: res, loading: false, error: null });
+          setState({ data: res, error: null, source: 'api' });
         });
       })
-      .catch((err) => {
-        console.error('Failed to load services', err);
+      .catch(() => {
         setState((current) => ({
-          data: current.data,
-          loading: false,
-          error: current.data ? null : SERVICES_ERROR_MESSAGE,
+          ...current,
+          error: SERVICES_ERROR_MESSAGE,
         }));
       });
   }, []);
@@ -426,24 +384,7 @@ export function ServicesHomePage() {
         </section>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          {isInitialLoading ? (
-            <div className="space-y-12">
-              {SKELETON_SECTION_KEYS.map((sectionKey) => (
-                <div key={sectionKey} className="space-y-6">
-                  <div className="flex items-center gap-2 border-b border-surface-border pb-2">
-                    <div className="h-6 w-6 rounded bg-surface-muted" />
-                    <div className="h-7 w-44 rounded bg-surface-muted" />
-                  </div>
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {SKELETON_CARD_KEYS.map((skeletonIndex) => (
-                      <ServiceCardSkeleton key={`${sectionKey}-${skeletonIndex}`} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-12">
+          <div className="space-y-12">
               <div className="relative overflow-hidden rounded-[2rem] border border-sky-200/50 bg-gradient-to-br from-sky-50 to-indigo-50/30 p-8 sm:p-12 shadow-sm mb-8">
                 <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto space-y-6">
                   <h2 className="text-3xl font-black text-slate-900 md:text-4xl">البوابة المجتمعية</h2>
@@ -485,7 +426,6 @@ export function ServicesHomePage() {
                 </div>
               )}
             </div>
-          )}
         </div>
       </div>
     </div>

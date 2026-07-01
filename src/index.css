@@ -52,7 +52,7 @@
   }
 }
 
-/* ── Hero gradient ─────────────────────────────────────────── */
+/* Hero gradient */
 .hero-gradient {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
   position: relative;
@@ -69,7 +69,7 @@
   pointer-events: none;
 }
 
-/* ── Cards ─────────────────────────────────────────────────── */
+/* Cards */
 .service-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -87,7 +87,7 @@
   contain-intrinsic-size: 720px;
 }
 
-/* ── Step badge ────────────────────────────────────────────── */
+/* Step badge */
 .step-badge {
   width: 48px;
   height: 48px;
@@ -102,7 +102,7 @@
   flex-shrink: 0;
 }
 
-/* ── Form input styling ────────────────────────────────────── */
+/* Form input styling */
 .form-input {
   width: 100%;
   border-radius: 0.75rem !important;
@@ -125,7 +125,7 @@
   color: #94a3b8;
 }
 
-/* ── Fade-in animation ─────────────────────────────────────── */
+/* Fade-in animation */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -157,21 +157,4 @@
   .service-card:hover {
     transform: none;
   }
-}
-
-/* ── Skeleton loading ──────────────────────────────────────── */
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-}
-
-.skeleton {
-  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
-  background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 0.5rem;
 }
