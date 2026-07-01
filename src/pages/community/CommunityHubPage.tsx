@@ -62,6 +62,9 @@ const communityImageThumbs: Record<string, string> = {
   '/community-images/food-shami-syrian.png': '/community-images/thumbs/food-shami-syrian.jpg',
 };
 
+const medicalDisclaimer =
+  'يعرض دليل السبحي المعلومات لتسهيل الوصول فقط، ولا يقدم استشارة طبية ولا يضمن مواعيد العمل أو توافر الخدمة. في الحالات الطارئة تواصل مع الإسعاف أو أقرب جهة طبية فورًا.';
+
 function getCommunityImageUrl(imageUrl: string) {
   return communityImageThumbs[imageUrl] ?? imageUrl;
 }
@@ -211,7 +214,17 @@ function ActionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} dir="rtl">
       <div className="bg-white rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl relative" onClick={e => e.stopPropagation()}>
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="font-bold text-lg text-slate-900 line-clamp-1">{item.title}</h3>
+          <div className="min-w-0">
+            <h3 className="font-bold text-lg text-slate-900 line-clamp-1">{item.title}</h3>
+            <div className="mt-2 flex flex-wrap gap-2 text-[11px] font-semibold">
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">{item.badge}</span>
+              {typeof item.rating === 'number' && (
+                <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-800">
+                  التقييم {item.rating.toFixed(1)}
+                </span>
+              )}
+            </div>
+          </div>
           <button onClick={onClose} className="flex h-8 w-8 items-center justify-center bg-slate-100 rounded-full text-slate-600 hover:bg-slate-200 transition-colors">
             <X size={16} />
           </button>
@@ -299,7 +312,9 @@ function ActionModal({
 
           <div className="pt-2">
             <p className="text-xs text-slate-500 leading-5 text-center bg-slate-50 p-3 rounded-xl border border-slate-100">
-              دليل السبحي يعرض المعلومات لتسهيل الوصول ولا يدّعي إدارة أو ملكية الجهة.
+              {item.category === 'health'
+                ? medicalDisclaimer
+                : 'دليل السبحي يعرض المعلومات لتسهيل الوصول ولا يدّعي إدارة أو ملكية الجهة.'}
             </p>
           </div>
         </div>
@@ -382,6 +397,7 @@ function GuidanceModal({
 function CommunityCard({ item, onShowMore, onShowGuidance }: { item: CommunityHubItem; onShowMore: (item: CommunityHubItem) => void; onShowGuidance?: (item: CommunityHubItem) => void }) {
   const styles = categoryVisuals[item.category];
   const phones = getPhoneNumbers(item);
+  const primaryDirectionsUrl = item.directionsUrl ?? item.mapUrl ?? (item.category === 'health' ? item.sourceUrl : undefined);
 
   return (
     <article
@@ -403,39 +419,54 @@ function CommunityCard({ item, onShowMore, onShowGuidance }: { item: CommunityHu
           </p>
           <h3 className="text-lg font-black leading-snug text-slate-900">{item.title}</h3>
           <p className="line-clamp-2 text-sm leading-6 text-slate-600">{item.description}</p>
-        </div>        <div className="mt-auto flex flex-col gap-2 pt-2">
-          {(phones.length > 0 || (item.category === 'awareness' && item.sourceUrl) || item.guidanceSections || item.mapUrl || item.sourceUrl) && (
+        </div>
+        <div className="mt-auto flex flex-col gap-2 pt-2">
+          {(item.category === 'health' || phones.length > 0 || (item.category === 'awareness' && item.sourceUrl) || item.guidanceSections || item.mapUrl || item.sourceUrl) && (
             <div className="flex flex-wrap gap-2">
+              {item.category === 'health' && primaryDirectionsUrl && (
+                <a
+                  href={primaryDirectionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-sky-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-sky-700"
+                >
+                  <MapPin size={16} />
+                  الاتجاهات
+                </a>
+              )}
+
               {item.guidanceSections && onShowGuidance ? (
-                 <button onClick={() => onShowGuidance(item)} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-800">
-                   عرض الإرشادات
-                 </button>
+                <button onClick={() => onShowGuidance(item)} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-800">
+                  عرض الإرشادات
+                </button>
               ) : item.category === 'awareness' && item.sourceUrl ? (
-                 <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-800">
-                   عرض الإرشادات
-                 </a>
+                <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-800">
+                  عرض الإرشادات
+                </a>
               ) : phones.length === 1 ? (
-                 <a href={phones[0].type === 'whatsapp' ? `https://wa.me/2${normalizePhone(phones[0].number)}` : `tel:${normalizePhone(phones[0].number)}`} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-emerald-700">
-                   {phones[0].type === 'whatsapp' ? <MessageCircle size={16} /> : <PhoneCall size={16} />}
-                   {phones[0].type === 'whatsapp' ? 'واتساب' : 'اتصل الآن'}
-                 </a>
+                <a href={phones[0].type === 'whatsapp' ? `https://wa.me/2${normalizePhone(phones[0].number)}` : `tel:${normalizePhone(phones[0].number)}`} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-emerald-700">
+                  {phones[0].type === 'whatsapp' ? <MessageCircle size={16} /> : <PhoneCall size={16} />}
+                  {phones[0].type === 'whatsapp' ? 'واتساب' : 'اتصل الآن'}
+                </a>
               ) : phones.length > 1 ? (
-                 <button onClick={() => onShowMore(item)} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-emerald-700">
-                   <PhoneCall size={16} />
-                   اتصال سريع
-                 </button>
+                <button onClick={() => onShowMore(item)} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-emerald-700">
+                  <PhoneCall size={16} />
+                  اتصال سريع
+                </button>
               ) : item.sourceUrl && !item.mapUrl ? (
-                 <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-800">
-                   زيارة الصفحة
-                 </a>
+                <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-800">
+                  زيارة الصفحة
+                </a>
               ) : null}
 
-              {(item.directionsUrl || item.mapUrl) && (
-                 <a href={item.directionsUrl ?? item.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-sky-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-sky-700">
-                   <MapPin size={16} />
-                   الاتجاهات
-                 </a>
-              )}
+              {!item.category || item.category !== 'health' ? (
+                (item.directionsUrl || item.mapUrl) && (
+                  <a href={item.directionsUrl ?? item.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-sky-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-sky-700">
+                    <MapPin size={16} />
+                    الاتجاهات
+                  </a>
+                )
+              ) : null}
             </div>
           )}
           
