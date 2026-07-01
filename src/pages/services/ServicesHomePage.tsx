@@ -1,5 +1,5 @@
-import { useEffect, useState, memo, useMemo } from 'react';
-import type { ReactNode, SVGProps, CSSProperties } from 'react';
+import { memo, startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode, SVGProps, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   MapPin,
@@ -9,8 +9,8 @@ import {
   Wrench,
   Building,
 } from 'lucide-react';
-import { getServicesHome } from '../../lib/api/services-service';
-import type { ServiceItem } from '../../lib/api/types';
+import { getCachedServicesHome, getServicesHome } from '../../lib/api/services-service';
+import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
 import { ROUTES } from '../../lib/constants/routes';
 import logo from '../../assets/dalil-subhi-logo.jpg';
 
@@ -32,6 +32,39 @@ const sectionCopy = {
   },
 } as const;
 
+const SERVICES_ERROR_MESSAGE =
+  'ØªØ¹Ø°Ø± ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¯Ù„ÙŠÙ„ Ø­Ø§Ù„ÙŠØ§Ù‹. ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„Ø§ØªØµØ§Ù„ Ø¨Ø§Ù„Ø®Ø§Ø¯Ù….';
+const SKELETON_SECTION_KEYS = ['facilities', 'technical', 'realEstate'] as const;
+const SKELETON_CARD_KEYS = [0, 1, 2, 3] as const;
+const EMPTY_SERVICES_HOME: ServicesHomeResponse = {
+  facilities: [],
+  technicalServices: [],
+  realEstateServices: [],
+  featured: [],
+};
+
+function getOptimizedServiceImageUrl(url: string) {
+  if (!url.includes('/image/upload/')) {
+    return url;
+  }
+
+  return url.replace('/image/upload/', '/image/upload/f_auto,q_auto:eco,c_fill,g_auto,w_640,h_360/');
+}
+
+function hideBrokenImage(event: SyntheticEvent<HTMLImageElement>) {
+  event.currentTarget.style.display = 'none';
+}
+
+function createInitialServicesState() {
+  const cached = getCachedServicesHome();
+
+  return {
+    data: cached,
+    loading: !cached,
+    error: null as string | null,
+  };
+}
+
 const FacebookIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"
@@ -48,30 +81,31 @@ const FacebookIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const ServiceCard = memo(function ServiceCard({ item }: { item: ServiceItem }) {
+function ServiceCardView({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
   const isRealEstate = item.serviceType === 'REAL_ESTATE';
-  const coverImage = item.images && item.images.length > 0 ? item.images[0] : null;
+  const coverImage = item.images?.[0] ? getOptimizedServiceImageUrl(item.images[0]) : null;
+  const whatsappHref =
+    !isFacility && item.whatsapp ? `https://wa.me/${item.whatsapp.replace(/\D/g, '')}` : null;
   const badgeLabel = isFacility ? 'مرفق' : isRealEstate ? 'خدمة عقارية' : 'خدمة فنية';
 
   return (
-    <div className="service-card flex h-full flex-col justify-between overflow-hidden group">
+    <div className="service-card group flex h-full flex-col justify-between overflow-hidden">
       <div>
         <div className="relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-accent/5 to-accent/15">
-          <div className="absolute inset-0 bg-grid-pattern opacity-10" />
           {coverImage ? (
             <img
               src={coverImage}
               alt={item.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02]"
               loading="lazy"
               decoding="async"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
+              width="640"
+              height="360"
+              onError={hideBrokenImage}
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-110">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-accent transition-transform duration-200 ease-out group-hover:scale-105">
               {isFacility || isRealEstate ? <Building size={32} /> : <Wrench size={32} />}
             </div>
           )}
@@ -133,9 +167,9 @@ const ServiceCard = memo(function ServiceCard({ item }: { item: ServiceItem }) {
             </a>
           )}
 
-          {!isFacility && item.whatsapp && (
+          {whatsappHref && (
             <a
-              href={`https://wa.me/${item.whatsapp.replace('+', '')}`}
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-emerald-500/10 text-sm font-semibold text-emerald-600 transition-colors hover:bg-emerald-500/20"
@@ -148,9 +182,11 @@ const ServiceCard = memo(function ServiceCard({ item }: { item: ServiceItem }) {
       </div>
     </div>
   );
-});
+}
 
-function ServiceCardSkeleton() {
+const ServiceCard = memo(ServiceCardView);
+
+function ServiceCardSkeletonView() {
   return (
     <div className="service-card flex h-full animate-pulse flex-col justify-between overflow-hidden">
       <div>
@@ -179,7 +215,9 @@ function ServiceCardSkeleton() {
   );
 }
 
-const ServicesSection = memo(function ServicesSection({
+const ServiceCardSkeleton = memo(ServiceCardSkeletonView);
+
+function ServicesSectionView({
   id,
   title,
   icon,
@@ -195,11 +233,7 @@ const ServicesSection = memo(function ServicesSection({
   }
 
   return (
-    <section 
-      id={id} 
-      className="space-y-6"
-      style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' } as CSSProperties}
-    >
+    <section id={id} className="services-section space-y-6">
       <div className="flex items-center gap-2 border-b border-surface-border pb-2">
         {icon}
         <h2 className="text-2xl font-bold text-on-surface">{title}</h2>
@@ -212,38 +246,76 @@ const ServicesSection = memo(function ServicesSection({
       </div>
     </section>
   );
-});
+}
+
+const ServicesSection = memo(ServicesSectionView);
 
 export function ServicesHomePage() {
-  const [data, setData] = useState<{
-    facilities: ServiceItem[];
-    technicalServices: ServiceItem[];
-    realEstateServices: ServiceItem[];
-    featured: ServiceItem[];
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+  const [state, setState] = useState(createInitialServicesState);
+  const hadCachedDataOnMount = useRef(state.data !== null);
+  const { data, loading, error } = state;
   useEffect(() => {
-    getServicesHome()
+    let isActive = true;
+
+    getServicesHome({ bypassCache: hadCachedDataOnMount.current })
       .then((res) => {
-        setData(res);
-        setLoading(false);
+        if (!isActive) {
+          return;
+        }
+
+        startTransition(() => {
+          setState({ data: res, loading: false, error: null });
+        });
       })
       .catch((err) => {
+        if (!isActive) {
+          return;
+        }
+
         console.error('Failed to load services', err);
-        setError('تعذر تحميل الدليل حالياً. يرجى مراجعة الاتصال بالخادم.');
-        setLoading(false);
+        setState((current) => ({
+          data: current.data,
+          loading: false,
+          error: current.data ? null : SERVICES_ERROR_MESSAGE,
+        }));
       });
+
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   const isInitialLoading = loading && !data;
-  const facilities = useMemo(() => data?.facilities ?? [], [data]);
-  const technicalServices = useMemo(() => data?.technicalServices ?? [], [data]);
-  const realEstateServices = useMemo(() => data?.realEstateServices ?? [], [data]);
+  const facilities = useMemo(() => data?.facilities ?? EMPTY_SERVICES_HOME.facilities, [data]);
+  const technicalServices = useMemo(
+    () => data?.technicalServices ?? EMPTY_SERVICES_HOME.technicalServices,
+    [data],
+  );
+  const realEstateServices = useMemo(
+    () => data?.realEstateServices ?? EMPTY_SERVICES_HOME.realEstateServices,
+    [data],
+  );
   const hasAnyServices = useMemo(() => {
     return facilities.length > 0 || technicalServices.length > 0 || realEstateServices.length > 0;
   }, [facilities, technicalServices, realEstateServices]);
+
+  const handleRetry = useCallback(() => {
+    setState((current) => ({ ...current, loading: true, error: null }));
+    getServicesHome({ bypassCache: true })
+      .then((res) => {
+        startTransition(() => {
+          setState({ data: res, loading: false, error: null });
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to load services', err);
+        setState((current) => ({
+          data: current.data,
+          loading: false,
+          error: current.data ? null : SERVICES_ERROR_MESSAGE,
+        }));
+      });
+  }, []);
 
   if (error && !data) {
     return (
@@ -253,21 +325,9 @@ export function ServicesHomePage() {
             <Wrench size={32} />
           </div>
           <h2 className="text-xl font-bold text-on-surface">خطأ في التحميل</h2>
-          <p className="text-sm leading-relaxed text-on-surface-muted">{error}</p>
+          <p className="text-sm leading-relaxed text-on-surface-muted">{error || SERVICES_ERROR_MESSAGE}</p>
           <button
-            onClick={() => {
-              setLoading(true);
-              setError(null);
-              getServicesHome()
-                .then((res) => {
-                  setData(res);
-                  setLoading(false);
-                })
-                .catch(() => {
-                  setError('تعذر تحميل الدليل حالياً. يرجى مراجعة الاتصال بالخادم.');
-                  setLoading(false);
-                });
-            }}
+            onClick={handleRetry}
             className="rounded-xl bg-accent px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent/90"
           >
             إعادة المحاولة
@@ -280,7 +340,6 @@ export function ServicesHomePage() {
   return (
     <div className="animate-fade-in text-right" dir="rtl">
       <section className="hero-gradient relative overflow-hidden px-4 py-20 text-center text-white md:py-24">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="relative z-10 mx-auto max-w-4xl">
           <h1 className="text-3xl font-black leading-tight md:text-5xl">
             مجمع الخدمات للمنطقة
@@ -299,6 +358,10 @@ export function ServicesHomePage() {
                 src={logo}
                 alt=""
                 className="w-[320px] object-contain opacity-[0.11] md:w-[460px]"
+                loading="lazy"
+                decoding="async"
+                width="460"
+                height="460"
               />
             </div>
 
@@ -311,7 +374,7 @@ export function ServicesHomePage() {
                 href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-all hover:border-emerald-500/50 hover:bg-surface-container-high group"
+                className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-colors hover:border-emerald-500/50 hover:bg-surface-container-high"
               >
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
                   <MessageCircle size={28} />
@@ -325,7 +388,7 @@ export function ServicesHomePage() {
                 href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-all hover:border-blue-500/50 hover:bg-surface-container-high group"
+                className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-colors hover:border-blue-500/50 hover:bg-surface-container-high"
               >
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <FacebookIcon />
@@ -339,10 +402,18 @@ export function ServicesHomePage() {
                 href="https://www.dalilsubhi.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-all hover:border-primary/50 hover:bg-surface-container-high group"
+                className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-colors hover:border-primary/50 hover:bg-surface-container-high"
               >
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-outline-variant bg-white">
-                  <img src={logo} alt="دليل السبحي" className="h-full w-full object-cover" />
+                  <img
+                    src={logo}
+                    alt="دليل السبحي"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    width="56"
+                    height="56"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-on-surface transition-colors group-hover:text-primary">دليل السبحي</h3>
@@ -356,15 +427,15 @@ export function ServicesHomePage() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           {isInitialLoading ? (
             <div className="space-y-12">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <div key={index} className="space-y-6">
+              {SKELETON_SECTION_KEYS.map((sectionKey) => (
+                <div key={sectionKey} className="space-y-6">
                   <div className="flex items-center gap-2 border-b border-surface-border pb-2">
                     <div className="h-6 w-6 rounded bg-surface-muted" />
                     <div className="h-7 w-44 rounded bg-surface-muted" />
                   </div>
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {Array.from({ length: 4 }).map((_, skeletonIndex) => (
-                      <ServiceCardSkeleton key={`${index}-${skeletonIndex}`} />
+                    {SKELETON_CARD_KEYS.map((skeletonIndex) => (
+                      <ServiceCardSkeleton key={`${sectionKey}-${skeletonIndex}`} />
                     ))}
                   </div>
                 </div>
@@ -378,7 +449,7 @@ export function ServicesHomePage() {
                   <p className="text-lg text-slate-600 leading-relaxed">
                     جامعات، مطاعم، طوارئ، إرشادات وروابط مهمة في مكان واحد.
                   </p>
-                  <Link to={ROUTES.COMMUNITY} className="inline-flex h-14 items-center justify-center rounded-2xl bg-slate-900 px-8 text-base font-bold text-white transition-all hover:bg-slate-800 hover:-translate-y-0.5 shadow-lg shadow-slate-200">
+                  <Link to={ROUTES.COMMUNITY} className="inline-flex h-14 items-center justify-center rounded-2xl bg-slate-900 px-8 text-base font-bold text-white shadow-sm transition-colors hover:bg-slate-800">
                     استكشف البوابة المجتمعية
                   </Link>
                 </div>

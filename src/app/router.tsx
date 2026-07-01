@@ -4,7 +4,10 @@ import { ScrollToTop } from '../components/layout/ScrollToTop';
 import { PublicServicesShell } from '../components/layout/PublicServicesShell';
 import { ROUTES } from '../lib/constants/routes';
 import { ServicesHomePage } from '../pages/services/ServicesHomePage';
-import { CommunityHubPage } from '../pages/community/CommunityHubPage';
+
+const CommunityHubPage = lazy(() =>
+  import('../pages/community/CommunityHubPage').then((module) => ({ default: module.CommunityHubPage })),
+);
 
 const ServiceCategoryPage = lazy(() =>
   import('../pages/services/ServiceCategoryPage').then((module) => ({ default: module.ServiceCategoryPage })),

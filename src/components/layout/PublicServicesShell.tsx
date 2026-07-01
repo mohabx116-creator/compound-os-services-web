@@ -22,7 +22,14 @@ export function PublicServicesShell() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105 bg-white">
-                <img src={logo} alt="مجمع الخدمات للمنطقة" className="w-full h-full object-cover" />
+                <img
+                  src={logo}
+                  alt="مجمع الخدمات للمنطقة"
+                  className="h-full w-full object-cover"
+                  decoding="async"
+                  width="36"
+                  height="36"
+                />
               </div>
               <div className="leading-tight">
                 <div className="font-bold text-base tracking-wide">مجمع الخدمات للمنطقة</div>

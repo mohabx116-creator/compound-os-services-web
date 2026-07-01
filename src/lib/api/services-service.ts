@@ -14,11 +14,86 @@ const api = axios.create({
   },
 });
 
+const SERVICES_HOME_CACHE_KEY = 'compound-os-services-home:v1';
+const SERVICES_HOME_CACHE_TTL_MS = 5 * 60 * 1000;
+
+let servicesHomeMemoryCache: { data: ServicesHomeResponse; cachedAt: number } | null = null;
+let servicesHomeRequest: Promise<ServicesHomeResponse> | null = null;
+
+function isFresh(cachedAt: number) {
+  return Date.now() - cachedAt < SERVICES_HOME_CACHE_TTL_MS;
+}
+
+function readServicesHomeCache() {
+  if (servicesHomeMemoryCache && isFresh(servicesHomeMemoryCache.cachedAt)) {
+    return servicesHomeMemoryCache.data;
+  }
+
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    const rawCache = window.sessionStorage.getItem(SERVICES_HOME_CACHE_KEY);
+    if (!rawCache) {
+      return null;
+    }
+
+    const parsed = JSON.parse(rawCache) as { data?: ServicesHomeResponse; cachedAt?: number };
+    if (!parsed.data || !parsed.cachedAt || !isFresh(parsed.cachedAt)) {
+      window.sessionStorage.removeItem(SERVICES_HOME_CACHE_KEY);
+      return null;
+    }
+
+    servicesHomeMemoryCache = { data: parsed.data, cachedAt: parsed.cachedAt };
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
+function writeServicesHomeCache(data: ServicesHomeResponse) {
+  const cachedAt = Date.now();
+  servicesHomeMemoryCache = { data, cachedAt };
+
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(SERVICES_HOME_CACHE_KEY, JSON.stringify({ data, cachedAt }));
+  } catch {
+    // Session storage can fail in private windows; memory cache still covers this page.
+  }
+}
+
 // ── Home ──────────────────────────────────────────────────────────────────────
 
-export async function getServicesHome(): Promise<ServicesHomeResponse> {
-  const { data } = await api.get<ApiResponse<ServicesHomeResponse>>('/services');
-  return data.data;
+export function getCachedServicesHome(): ServicesHomeResponse | null {
+  return readServicesHomeCache();
+}
+
+export async function getServicesHome(options: { bypassCache?: boolean } = {}): Promise<ServicesHomeResponse> {
+  if (!options.bypassCache) {
+    const cached = readServicesHomeCache();
+    if (cached) {
+      return cached;
+    }
+  }
+
+  if (!servicesHomeRequest) {
+    servicesHomeRequest = api
+      .get<ApiResponse<ServicesHomeResponse>>('/services')
+      .then(({ data }) => {
+        writeServicesHomeCache(data.data);
+        return data.data;
+      })
+      .finally(() => {
+        servicesHomeRequest = null;
+      });
+  }
+
+  return servicesHomeRequest;
 }
 
 // ── Items ─────────────────────────────────────────────────────────────────────
