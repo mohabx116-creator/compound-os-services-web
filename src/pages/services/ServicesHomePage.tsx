@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem } from '../../lib/api/types';
+import { ROUTES } from '../../lib/constants/routes';
 import logo from '../../assets/dalil-subhi-logo.jpg';
 
 const sectionCopy = {
@@ -364,6 +365,18 @@ export function ServicesHomePage() {
             </div>
           ) : (
             <div className="space-y-12">
+              <div className="relative overflow-hidden rounded-[2rem] border border-sky-200/50 bg-gradient-to-br from-sky-50 to-indigo-50/30 p-8 sm:p-12 shadow-sm mb-8">
+                <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto space-y-6">
+                  <h2 className="text-3xl font-black text-slate-900 md:text-4xl">البوابة المجتمعية</h2>
+                  <p className="text-lg text-slate-600 leading-relaxed">
+                    جامعات، مطاعم، طوارئ، إرشادات وروابط مهمة في مكان واحد.
+                  </p>
+                  <Link to={ROUTES.COMMUNITY} className="inline-flex h-14 items-center justify-center rounded-2xl bg-slate-900 px-8 text-base font-bold text-white transition-all hover:bg-slate-800 hover:-translate-y-0.5 shadow-lg shadow-slate-200">
+                    استكشف البوابة المجتمعية
+                  </Link>
+                </div>
+              </div>
+
               <ServicesSection
                 id="facilities"
                 title={sectionCopy.facilities.title}
@@ -388,7 +401,7 @@ export function ServicesHomePage() {
               {!hasAnyServices && (
                 <div className="rounded-2xl border border-surface-border bg-surface-muted py-20 text-center">
                   <p className="font-semibold text-on-surface-muted">
-                    الدليل فارغ حالياً. سيتم إضافة الخدمات والمرافق قريباً.
+                    لا توجد خدمات أو مرافق مسجلة حالياً.
                   </p>
                 </div>
               )}
