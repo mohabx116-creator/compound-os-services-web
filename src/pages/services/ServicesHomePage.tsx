@@ -90,22 +90,23 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
   const badgeLabel = isFacility ? 'مرفق' : isRealEstate ? 'خدمة عقارية' : 'خدمة فنية';
 
   return (
-    <div className="service-card group flex h-full flex-col justify-between overflow-hidden">
+    <div className="service-card flex h-full flex-col justify-between overflow-hidden">
       <div>
-        <div className="relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-accent/5 to-accent/15">
+        <div className="relative flex h-44 items-center justify-center overflow-hidden bg-accent/5">
           {coverImage ? (
             <img
               src={coverImage}
               alt={item.title}
-              className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02]"
+              className="h-full w-full object-cover"
               loading="lazy"
               decoding="async"
+              fetchPriority="low"
               width="640"
               height="360"
               onError={hideBrokenImage}
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-accent transition-transform duration-200 ease-out group-hover:scale-105">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-accent">
               {isFacility || isRealEstate ? <Building size={32} /> : <Wrench size={32} />}
             </div>
           )}
@@ -188,7 +189,7 @@ const ServiceCard = memo(ServiceCardView);
 
 function ServiceCardSkeletonView() {
   return (
-    <div className="service-card flex h-full animate-pulse flex-col justify-between overflow-hidden">
+    <div className="service-card flex h-full flex-col justify-between overflow-hidden">
       <div>
         <div className="h-44 bg-surface-muted" />
         <div className="space-y-4 p-5">
@@ -338,7 +339,7 @@ export function ServicesHomePage() {
   }
 
   return (
-    <div className="animate-fade-in text-right" dir="rtl">
+    <div className="text-right" dir="rtl">
       <section className="hero-gradient relative overflow-hidden px-4 py-20 text-center text-white md:py-24">
         <div className="relative z-10 mx-auto max-w-4xl">
           <h1 className="text-3xl font-black leading-tight md:text-5xl">
