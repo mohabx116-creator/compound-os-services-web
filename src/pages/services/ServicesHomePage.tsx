@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import type { ReactNode, SVGProps } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
+import type { ReactNode, SVGProps, CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import {
   MapPin,
@@ -48,7 +48,7 @@ const FacebookIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-function ServiceCard({ item }: { item: ServiceItem }) {
+const ServiceCard = memo(function ServiceCard({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
   const isRealEstate = item.serviceType === 'REAL_ESTATE';
   const coverImage = item.images && item.images.length > 0 ? item.images[0] : null;
@@ -64,6 +64,8 @@ function ServiceCard({ item }: { item: ServiceItem }) {
               src={coverImage}
               alt={item.title}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
@@ -146,7 +148,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
       </div>
     </div>
   );
-}
+});
 
 function ServiceCardSkeleton() {
   return (
@@ -177,7 +179,7 @@ function ServiceCardSkeleton() {
   );
 }
 
-function ServicesSection({
+const ServicesSection = memo(function ServicesSection({
   id,
   title,
   icon,
@@ -193,7 +195,11 @@ function ServicesSection({
   }
 
   return (
-    <section id={id} className="space-y-6">
+    <section 
+      id={id} 
+      className="space-y-6"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' } as CSSProperties}
+    >
       <div className="flex items-center gap-2 border-b border-surface-border pb-2">
         {icon}
         <h2 className="text-2xl font-bold text-on-surface">{title}</h2>
@@ -204,10 +210,9 @@ function ServicesSection({
           <ServiceCard key={service.id} item={service} />
         ))}
       </div>
-
     </section>
   );
-}
+});
 
 export function ServicesHomePage() {
   const [data, setData] = useState<{
@@ -233,10 +238,12 @@ export function ServicesHomePage() {
   }, []);
 
   const isInitialLoading = loading && !data;
-  const facilities = data?.facilities ?? [];
-  const technicalServices = data?.technicalServices ?? [];
-  const realEstateServices = data?.realEstateServices ?? [];
-  const hasAnyServices = facilities.length > 0 || technicalServices.length > 0 || realEstateServices.length > 0;
+  const facilities = useMemo(() => data?.facilities ?? [], [data]);
+  const technicalServices = useMemo(() => data?.technicalServices ?? [], [data]);
+  const realEstateServices = useMemo(() => data?.realEstateServices ?? [], [data]);
+  const hasAnyServices = useMemo(() => {
+    return facilities.length > 0 || technicalServices.length > 0 || realEstateServices.length > 0;
+  }, [facilities, technicalServices, realEstateServices]);
 
   if (error && !data) {
     return (
