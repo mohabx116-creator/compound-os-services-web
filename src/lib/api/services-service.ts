@@ -8,7 +8,7 @@ import type {
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'https://compound-os-api.onrender.com/api/v1',
-  timeout: 15_000,
+  timeout: 30_000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,14 +34,14 @@ function readServicesHomeCache() {
   }
 
   try {
-    const rawCache = window.sessionStorage.getItem(SERVICES_HOME_CACHE_KEY);
+    const rawCache = window.localStorage.getItem(SERVICES_HOME_CACHE_KEY);
     if (!rawCache) {
       return null;
     }
 
     const parsed = JSON.parse(rawCache) as { data?: ServicesHomeResponse; cachedAt?: number };
     if (!parsed.data || !parsed.cachedAt || !isFresh(parsed.cachedAt)) {
-      window.sessionStorage.removeItem(SERVICES_HOME_CACHE_KEY);
+      window.localStorage.removeItem(SERVICES_HOME_CACHE_KEY);
       return null;
     }
 
@@ -61,9 +61,9 @@ function writeServicesHomeCache(data: ServicesHomeResponse) {
   }
 
   try {
-    window.sessionStorage.setItem(SERVICES_HOME_CACHE_KEY, JSON.stringify({ data, cachedAt }));
+    window.localStorage.setItem(SERVICES_HOME_CACHE_KEY, JSON.stringify({ data, cachedAt }));
   } catch {
-    // Session storage can fail in private windows; memory cache still covers this page.
+    // Local storage can fail in private windows; memory cache still covers this page.
   }
 }
 

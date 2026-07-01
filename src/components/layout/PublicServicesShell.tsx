@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logo from '../../assets/dalil-subhi-logo.jpg';
+import logo from '../../assets/dalil-subhi-logo-192.jpg';
 
 const navLinks = [
   { label: 'الرئيسية', href: '/' },

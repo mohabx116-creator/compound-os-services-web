@@ -54,6 +54,18 @@ const categoryIcons: Record<CommunityCategory, ReactNode> = {
   awareness: <BookOpen size={20} />,
 };
 
+const communityImageThumbs: Record<string, string> = {
+  '/community-images/emergency-egypt.jpg': '/community-images/thumbs/emergency-egypt.jpg',
+  '/community-images/food-ibn-hamido.png': '/community-images/thumbs/food-ibn-hamido.jpg',
+  '/community-images/food-kesh-malek.png': '/community-images/thumbs/food-kesh-malek.jpg',
+  '/community-images/food-koshary-hend.png': '/community-images/thumbs/food-koshary-hend.jpg',
+  '/community-images/food-shami-syrian.png': '/community-images/thumbs/food-shami-syrian.jpg',
+};
+
+function getCommunityImageUrl(imageUrl: string) {
+  return communityImageThumbs[imageUrl] ?? imageUrl;
+}
+
 const categoryVisuals: Record<
   CommunityCategory,
   { outer: string; chip: string; border: string; glow: string }
@@ -126,12 +138,12 @@ function CommunityImage({ item, className }: { item: CommunityHubItem; className
         className={`relative flex h-full min-h-[150px] w-full items-center justify-center bg-gradient-to-br ${styles.outer} ${className ?? ''}`}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_42%)]" />
-        <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 text-white shadow-lg backdrop-blur-sm">
+        <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 text-white">
           {categoryIcons[item.category]}
         </div>
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
           <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-            <span className="rounded-full bg-white/15 px-2.5 py-1 backdrop-blur-sm">صورة توضيحية</span>
+            <span className="rounded-full bg-white/15 px-2.5 py-1">صورة توضيحية</span>
           </div>
         </div>
       </div>
@@ -141,25 +153,29 @@ function CommunityImage({ item, className }: { item: CommunityHubItem; className
   return (
     <div className={`relative h-full w-full overflow-hidden bg-slate-100 ${className ?? ''}`}>
       <img
-        src={item.imageUrl}
+        src={getCommunityImageUrl(item.imageUrl)}
         alt={item.imageAlt ?? item.title}
         className="h-full w-full object-cover"
         loading="lazy"
+        decoding="async"
+        fetchPriority="low"
+        width="640"
+        height="360"
         onError={() => setHasError(true)}
       />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.04)_0%,rgba(2,6,23,0.14)_56%,rgba(2,6,23,0.58)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4">
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0 space-y-1 text-white">
-            <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
+            <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90">
               {communityCategoryLabels[item.category]}
             </span>
             <p className="line-clamp-2 text-sm font-bold leading-6">{item.title}</p>
             <div className="flex flex-wrap gap-2 pt-1 text-[11px] font-semibold">
-              <span className="rounded-full bg-white/15 px-2.5 py-1 backdrop-blur-sm">{getCleanImageLabel(item)}</span>
+              <span className="rounded-full bg-white/15 px-2.5 py-1">{getCleanImageLabel(item)}</span>
             </div>
           </div>
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-white backdrop-blur-sm">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-white">
             {categoryIcons[item.category]}
           </div>
         </div>
@@ -339,6 +355,10 @@ function GuidanceModal({
                   src={img.imageUrl} 
                   alt={img.imageAlt} 
                   className="w-full rounded-2xl border border-slate-100"
+                  loading="lazy"
+                  decoding="async"
+                  width="800"
+                  height="450"
                   onError={() => setFailedImages(prev => new Set(prev).add(idx))}
                 />
                 {img.imageCredit && (
@@ -365,7 +385,7 @@ function CommunityCard({ item, onShowMore, onShowGuidance }: { item: CommunityHu
 
   return (
     <article
-      className={`group flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl ${styles.border} ${styles.glow}`}
+      className={`flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition-colors ${styles.border}`}
     >
       <div className="relative">
         <CommunityImage item={item} className="h-[170px] md:h-[190px]" />
@@ -434,7 +454,7 @@ function EmergencyCard({ item, onShowMore }: { item: CommunityHubItem; onShowMor
 
   return (
     <article
-      className={`flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-gradient-to-br ${styles.outer} shadow-sm ${styles.border} ${styles.glow}`}
+      className={`flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-gradient-to-br ${styles.outer} shadow-sm ${styles.border}`}
     >
       <div className="relative">
         <CommunityImage item={item} className="h-[160px] md:h-[180px]" />
@@ -456,12 +476,12 @@ function EmergencyCard({ item, onShowMore }: { item: CommunityHubItem; onShowMor
 
         <div className="mt-auto grid grid-cols-2 gap-2 pt-2">
           {phones.length === 1 ? (
-             <a href={`tel:${normalizePhone(phones[0].number)}`} className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-rose-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-rose-700 shadow-lg shadow-rose-200">
+             <a href={`tel:${normalizePhone(phones[0].number)}`} className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-rose-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-rose-700">
                <PhoneCall size={16} />
                اتصل الآن
              </a>
           ) : phones.length > 1 ? (
-             <button onClick={() => onShowMore(item)} className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-rose-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-rose-700 shadow-lg shadow-rose-200">
+             <button onClick={() => onShowMore(item)} className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-rose-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-rose-700">
                <PhoneCall size={16} />
                اتصال سريع
              </button>
@@ -469,7 +489,7 @@ function EmergencyCard({ item, onShowMore }: { item: CommunityHubItem; onShowMor
             <div className="hidden" />
           )}
           
-          <button onClick={() => onShowMore(item)} className="inline-flex min-h-[44px] items-center justify-center rounded-2xl border border-rose-200/50 bg-white/80 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-rose-900 transition-colors hover:bg-white">
+          <button onClick={() => onShowMore(item)} className="inline-flex min-h-[44px] items-center justify-center rounded-2xl border border-rose-200/50 bg-white/80 px-4 py-2 text-sm font-semibold text-rose-900 transition-colors hover:bg-white">
             المزيد
           </button>
         </div>
@@ -625,9 +645,9 @@ export function CommunityHubPage() {
     <>
       <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_28%,#ffffff_100%)] text-right" dir="rtl">
         <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.96),rgba(15,23,42,0.88)_48%,rgba(2,6,23,0.94)_100%)] px-4 py-14 text-white sm:px-6 md:py-20">
-          <div className="pointer-events-none absolute inset-0 opacity-20">
-            <div className="absolute left-0 top-0 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-400/15 blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 opacity-10">
+            <div className="absolute left-0 top-0 h-48 w-48 rounded-full bg-emerald-400/20" />
+            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-amber-400/15" />
           </div>
 
           <div className="relative mx-auto max-w-7xl space-y-8">
@@ -657,7 +677,7 @@ export function CommunityHubPage() {
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {heroHighlights.map((item) => (
-                    <div key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+                    <div key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
                       <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white">
                         {item.icon}
                       </div>
@@ -667,7 +687,7 @@ export function CommunityHubPage() {
                   ))}
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/10 backdrop-blur-sm md:p-5">
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-sm md:p-5">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white">
@@ -724,7 +744,7 @@ export function CommunityHubPage() {
               </div>
 
               <div className="space-y-4">
-                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-semibold text-white/70">لقطات سريعة</p>

@@ -12,7 +12,7 @@ import {
 import { getCachedServicesHome, getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
 import { ROUTES } from '../../lib/constants/routes';
-import logo from '../../assets/dalil-subhi-logo.jpg';
+import logo from '../../assets/dalil-subhi-logo-192.jpg';
 
 const sectionCopy = {
   facilities: {
