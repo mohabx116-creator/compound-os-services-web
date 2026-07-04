@@ -101,12 +101,12 @@ export const communityCategoryDescriptions: Record<CommunityCategory, string> = 
 };
 
 export const communityCategoryOrder: CommunityCategory[] = [
-  'education',
   'health',
-  'food',
-  'markets',
   'emergency',
+  'food',
+  'education',
   'awareness',
+  'markets',
 ];
 
 export const communityCategoryFilters: Array<{
@@ -114,12 +114,12 @@ export const communityCategoryFilters: Array<{
   label: string;
 }> = [
   { key: 'all', label: 'الكل' },
-  { key: 'education', label: 'التعليم' },
-  { key: 'health', label: 'الصحة' },
-  { key: 'food', label: 'المطاعم' },
-  { key: 'markets', label: 'الأسواق' },
+  { key: 'health', label: 'طبي وصحي' },
   { key: 'emergency', label: 'الطوارئ' },
+  { key: 'food', label: 'المطاعم' },
+  { key: 'education', label: 'التعليم' },
   { key: 'awareness', label: 'الإرشادات' },
+  { key: 'markets', label: 'الأسواق' },
 ];
 
 const rawHubItems: CommunityHubItem[] = [

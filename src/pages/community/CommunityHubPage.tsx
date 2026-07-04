@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, useRef, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -29,19 +29,28 @@ import { ROUTES } from '../../lib/constants/routes';
 
 const heroHighlights = [
   {
-    title: 'الطوارئ والسلامة',
-    description: 'مراجع سريعة وواضحة عند الحاجة الفعلية.',
-    icon: <Siren size={20} />,
-  },
-  {
-    title: 'الصحة بالقرب منك',
-    description: 'خيارات طبية قريبة مع روابط ومؤشرات مرجعية.',
+    id: 'health',
+    title: 'طبي وصحي',
+    description: 'مستشفيات، صيدليات وعيادات',
     icon: <HeartPulse size={20} />,
   },
   {
-    title: 'اختيارات أهل المنطقة',
-    description: 'بوابة مرتبة لروابط مفيدة وقابلة للتحديث.',
-    icon: <Sparkles size={20} />,
+    id: 'emergency',
+    title: 'الطوارئ',
+    description: 'أرقام وروابط مهمة بسرعة',
+    icon: <Siren size={20} />,
+  },
+  {
+    id: 'food',
+    title: 'المطاعم',
+    description: 'اختيارات قريبة ومجربة',
+    icon: <UtensilsCrossed size={20} />,
+  },
+  {
+    id: 'education',
+    title: 'التعليم',
+    description: 'جامعات وروابط تعليمية',
+    icon: <GraduationCap size={20} />,
   },
 ] as const;
 
@@ -529,20 +538,7 @@ function EmergencyCard({ item, onShowMore }: { item: CommunityHubItem; onShowMor
   );
 }
 
-function HeroPreview({ item }: { item: CommunityHubItem }) {
-  return (
-    <div className="group flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-right transition-colors hover:bg-white/10">
-      <div className="h-16 w-16 overflow-hidden rounded-2xl bg-white/10 shrink-0">
-        <CommunityImage item={item} className="h-full w-full" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold text-white/70">{communityCategoryLabels[item.category]}</p>
-        <h3 className="line-clamp-1 text-sm font-bold text-white">{item.title}</h3>
-        <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/70">{item.description}</p>
-      </div>
-    </div>
-  );
-}
+
 
 function SectionHeader({
   title,
@@ -598,6 +594,23 @@ export function CommunityHubPage() {
   const [activeCategory, setActiveCategory] = useState<'all' | CommunityCategory>('all');
   const [activeModalItem, setActiveModalItem] = useState<CommunityHubItem | null>(null);
   const [activeGuidanceItem, setActiveGuidanceItem] = useState<CommunityHubItem | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const handleShortcut = (categoryId: CommunityCategory | 'all') => {
+    setActiveCategory(categoryId);
+    setSearch('');
+    requestAnimationFrame(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
+  const handleSearchExample = (query: string) => {
+    setSearch(query);
+    setActiveCategory('all');
+    requestAnimationFrame(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
 
   const visibleItems = useMemo(() => communityHubItems.filter((item) => item.isPublic !== false), []);
 
@@ -669,127 +682,109 @@ export function CommunityHubPage() {
     [filteredItems],
   );
 
-  const previewItems = useMemo(() => featuredItems.slice(0, 3), [featuredItems]);
   const hasResults = filteredItems.length > 0;
 
   return (
     <>
       <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_28%,#ffffff_100%)] text-right" dir="rtl">
-        <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.96),rgba(15,23,42,0.88)_48%,rgba(2,6,23,0.94)_100%)] px-4 py-14 text-white sm:px-6 md:py-20">
-          <div className="pointer-events-none absolute inset-0 opacity-10">
-            <div className="absolute left-0 top-0 h-48 w-48 rounded-full bg-emerald-400/20" />
-            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-amber-400/15" />
+        <section className="relative overflow-hidden bg-white px-4 py-10 text-slate-900 sm:px-6 md:py-16 border-b border-slate-100">
+          <div className="pointer-events-none absolute inset-0 opacity-40">
+            <div className="absolute left-0 top-0 h-48 w-48 rounded-full bg-emerald-400/20 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
           </div>
 
           <div className="relative mx-auto max-w-7xl space-y-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Link
                 to={ROUTES.SERVICES}
-                className="inline-flex items-center gap-2 self-start rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/90 transition-colors hover:bg-white/10"
+                className="inline-flex items-center gap-2 self-start rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 hover:text-slate-900"
               >
                 <ArrowRight size={16} className="rotate-180" />
                 العودة إلى الخدمات
               </Link>
 
-              <span className="inline-flex self-start rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 sm:self-auto">
+              <span className="inline-flex self-start rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 sm:self-auto">
                 يتم تحديث ومراجعة البيانات دورياً
               </span>
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-[1.25fr_0.92fr] lg:items-start">
-              <div className="space-y-5">
+            <div className="grid gap-8 lg:grid-cols-[1fr] lg:items-start max-w-4xl mx-auto">
+              <div className="space-y-6 text-center">
                 <div className="space-y-4">
-                  <h1 className="text-4xl font-black leading-tight tracking-tight md:text-6xl">البوابة المجتمعية</h1>
-                  <p className="max-w-3xl text-base leading-8 text-white/80 md:text-lg">
-                    كل ما يحتاجه أهل المنطقة في مكان واحد: تعليم، صحة، طوارئ، وإرشادات مجتمعية موثوقة وجاهزة
-                    للاستخدام.
+                  <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl">البوابة المجتمعية</h1>
+                  <p className="max-w-2xl mx-auto text-base leading-8 text-slate-600 md:text-lg">
+                  ابحث بسرعة عن مطعم، مستشفى، صيدلية، رقم طوارئ أو رابط مهم داخل دليل السبحي.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  {heroHighlights.map((item) => (
-                    <div key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                      <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white">
-                        {item.icon}
-                      </div>
-                      <h2 className="text-sm font-bold text-white">{item.title}</h2>
-                      <p className="mt-1 text-sm leading-6 text-white/70">{item.description}</p>
+                <div className="mx-auto max-w-2xl">
+                  <label className="block text-right">
+                    <span className="sr-only">البحث في البوابة المجتمعية</span>
+                    <div className="relative">
+                      <Search
+                        size={18}
+                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+                      <input
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="اكتب اللي محتاجه… مستشفى، صيدلية، مطعم، طوارئ"
+                        className="w-full rounded-2xl border border-slate-200 bg-white px-12 py-4 text-right text-sm font-medium text-slate-900 outline-none shadow-sm transition-shadow placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                      />
                     </div>
-                  ))}
-                </div>
-
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-sm md:p-5">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-white">
-                        <Search size={20} />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white/70">ابحث بسرعة</p>
-                        <p className="text-base font-bold text-white">عن جامعة أو مستشفى أو مطعم أو سوق</p>
-                      </div>
-                    </div>
-
-                    <label className="block">
-                      <span className="sr-only">البحث في البوابة المجتمعية</span>
-                      <div className="relative">
-                        <Search
-                          size={18}
-                          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
-                        />
-                        <input
-                          value={search}
-                          onChange={(event) => setSearch(event.target.value)}
-                          placeholder="ابحث عن جامعة، مستشفى، مطعم، سوق، أو إرشاد..."
-                          className="w-full rounded-2xl border border-white/10 bg-white/95 px-12 py-4 text-right text-sm font-medium text-slate-900 outline-none transition-shadow placeholder:text-slate-400 focus:shadow-[0_0_0_4px_rgba(16,185,129,0.18)]"
-                        />
-                      </div>
-                    </label>
-
-                    <div className="flex flex-wrap gap-2">
-                      {communityCategoryFilters.map((filter) => {
-                        const isActive = activeCategory === filter.key;
-
-                        return (
-                          <button
-                            key={filter.key}
-                            type="button"
-                            onClick={() => setActiveCategory(filter.key)}
-                            className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                              isActive
-                                ? 'bg-white text-slate-900'
-                                : 'bg-white/10 text-white/80 hover:bg-white/15 hover:text-white'
-                            }`}
-                          >
-                            {filter.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm leading-7 text-white/75">
-                      نجمع روابط ومعلومات مفيدة من مصادر عامة لتسهيل الوصول، مع مراجعة البيانات دوريًا.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-white/70">لقطات سريعة</p>
-                      <p className="text-lg font-bold text-white">بعض من أبرز الأقسام</p>
-                    </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white">
-                      <Sparkles size={20} />
-                    </div>
-                  </div>
-                  <div className="mt-4 grid grid-cols-1 gap-4">
-                    {previewItems.map((item) => (
-                      <HeroPreview key={item.id} item={item} />
+                  </label>
+                  
+                  <div className="mt-3 flex flex-wrap justify-center gap-2">
+                    <span className="text-xs text-slate-500 mt-1.5 ml-2">أمثلة سريعة:</span>
+                    {['مستشفى', 'صيدلية', 'مطعم', 'طوارئ'].map((example) => (
+                      <button
+                        key={example}
+                        onClick={() => handleSearchExample(example)}
+                        className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900"
+                      >
+                        {example}
+                      </button>
                     ))}
                   </div>
+                </div>
+
+                <div className="pt-4">
+                  <p className="mb-4 text-sm font-bold text-slate-500">اختار قسم أو ابحث مباشرة — والنتائج هتظهر فورًا.</p>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {heroHighlights.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => handleShortcut(item.id as CommunityCategory)}
+                        className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 active:scale-95 text-center"
+                      >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-100 group-hover:text-emerald-700">
+                          {item.icon}
+                        </div>
+                        <h2 className="text-sm font-bold text-slate-900">{item.title}</h2>
+                        <p className="text-[11px] text-slate-500">{item.description}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="flex flex-wrap justify-center gap-2 pt-6">
+                  {communityCategoryFilters.map((filter) => {
+                    const isActive = activeCategory === filter.key;
+                    return (
+                      <button
+                        key={filter.key}
+                        type="button"
+                        onClick={() => handleShortcut(filter.key as any)}
+                        className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                          isActive
+                            ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm'
+                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                        }`}
+                      >
+                        {filter.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -797,9 +792,19 @@ export function CommunityHubPage() {
         </section>
 
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 md:py-10">
-          <div className="mb-5 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800">
-            محتوى موثوق وجاهز للاستخدام
-          </div>
+          <div ref={resultsRef} className="scroll-mt-8" />
+          
+          {(activeCategory !== 'all' || search.trim()) ? (
+            <div className="mb-8 rounded-2xl bg-emerald-50 border border-emerald-100 p-4 text-center shadow-sm">
+              <span className="text-sm font-bold text-emerald-800">
+                {search.trim() ? `نتائج البحث عن: "${search}"` : `نتائج قسم: ${communityCategoryFilters.find(f => f.key === activeCategory)?.label}`}
+              </span>
+            </div>
+          ) : (
+            <div className="mb-8 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800">
+              محتوى موثوق وجاهز للاستخدام
+            </div>
+          )}
 
           <section className="space-y-5">
             <SectionHeader
