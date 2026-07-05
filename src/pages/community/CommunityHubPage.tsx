@@ -689,18 +689,22 @@ export function CommunityHubPage() {
     <>
       <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_28%,#ffffff_100%)] text-right" dir="rtl">
         <section className="relative overflow-hidden bg-white px-4 py-10 text-slate-900 sm:px-6 md:py-16 border-b border-slate-100">
-          {/* Subtle Brand Watermark */}
+          {/* Brand Watermark Layer */}
           <div 
-            className="pointer-events-none absolute inset-0 z-0 flex items-center justify-end overflow-hidden opacity-[0.03] mix-blend-multiply sm:justify-center md:opacity-[0.02]" 
+            className="pointer-events-none absolute inset-0 z-0 flex justify-center overflow-hidden opacity-[0.05] mix-blend-multiply md:opacity-[0.075]" 
             aria-hidden="true"
           >
             <img 
               src={dalilSubhiLogo} 
               alt="" 
-              className="w-[200%] max-w-[800px] -translate-y-10 translate-x-10 -rotate-12 blur-sm grayscale sm:w-[120%] sm:max-w-[1000px] sm:translate-x-0 sm:-rotate-6"
+              className="mt-[30px] w-[320px] -rotate-[3deg] blur-[1px] grayscale md:mt-[60px] md:w-[620px]"
             />
           </div>
 
+          {/* Readability Veil */}
+          <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-white/60 via-white/40 to-white/80" />
+
+          {/* Decorative Gradients */}
           <div className="pointer-events-none absolute inset-0 z-0 opacity-40">
             <div className="absolute left-0 top-0 h-48 w-48 rounded-full bg-emerald-400/20 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
