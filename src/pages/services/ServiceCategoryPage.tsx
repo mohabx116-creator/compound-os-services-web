@@ -55,7 +55,7 @@ function ItemCard({ item }: { item: ServiceItem }) {
                 <Clock size={12} /> {item.workingHours}
               </span>
             )}
-            {!isFacility && item.phone && (
+            {item.phone && (
               <span className="flex items-center gap-1">
                 <Phone size={12} /> {item.phone}
               </span>

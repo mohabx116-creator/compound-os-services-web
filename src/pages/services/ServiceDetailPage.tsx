@@ -194,7 +194,7 @@ export function ServiceDetailPage() {
               </div>
             )}
 
-            {!isFacility && item.phone && (
+            {item.phone && (
               <div className="flex items-start gap-3">
                 <Phone size={18} className="text-accent mt-0.5 flex-shrink-0" />
                 <div>
@@ -204,7 +204,7 @@ export function ServiceDetailPage() {
               </div>
             )}
 
-            {!isFacility && item.whatsapp && (
+            {item.whatsapp && (
               <div className="flex items-start gap-3">
                 <MessageCircle size={18} className="text-accent mt-0.5 flex-shrink-0" />
                 <div>
@@ -217,7 +217,7 @@ export function ServiceDetailPage() {
 
           {/* Action Buttons */}
           <div className="space-y-3">
-            {isFacility && item.googleMapsUrl && (
+            {item.googleMapsUrl && (
               <a
                 href={item.googleMapsUrl}
                 target="_blank"
@@ -229,7 +229,7 @@ export function ServiceDetailPage() {
               </a>
             )}
 
-            {!isFacility && item.phone && (
+            {item.phone && (
               <a
                 href={`tel:${item.phone}`}
                 className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-primary hover:bg-primary/95 text-white rounded-xl font-bold transition-colors"
@@ -239,7 +239,7 @@ export function ServiceDetailPage() {
               </a>
             )}
 
-            {!isFacility && item.whatsapp && (
+            {item.whatsapp && (
               <a
                 href={`https://wa.me/${item.whatsapp.replace('+', '')}`}
                 target="_blank"

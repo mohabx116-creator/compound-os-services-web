@@ -6,6 +6,7 @@ import {
   Clock,
   Phone,
   MessageCircle,
+  Navigation,
   Wrench,
   Building,
 } from 'lucide-react';
@@ -86,8 +87,7 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
   const isRealEstate = item.serviceType === 'REAL_ESTATE';
   const coverImage = item.images?.[0] ? getOptimizedServiceImageUrl(item.images[0]) : null;
-  const whatsappHref =
-    !isFacility && item.whatsapp ? `https://wa.me/${item.whatsapp.replace(/\D/g, '')}` : null;
+  const whatsappHref = item.whatsapp ? `https://wa.me/${item.whatsapp.replace(/\D/g, '')}` : null;
   const badgeLabel = isFacility ? 'مرفق' : isRealEstate ? 'خدمة عقارية' : 'خدمة فنية';
 
   return (
@@ -159,7 +159,7 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
             عرض التفاصيل
           </Link>
 
-          {!isFacility && item.phone && (
+          {item.phone && (
             <a
               href={`tel:${item.phone}`}
               className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-accent/10 text-sm font-semibold text-accent transition-colors hover:bg-accent/20"
@@ -178,6 +178,18 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
             >
               <MessageCircle size={14} />
               واتساب
+            </a>
+          )}
+
+          {item.googleMapsUrl && (
+            <a
+              href={item.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-sky-500/10 text-sm font-semibold text-sky-600 transition-colors hover:bg-sky-500/20"
+            >
+              <Navigation size={14} />
+              اتجاهات
             </a>
           )}
         </div>
