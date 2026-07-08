@@ -138,7 +138,7 @@ function MobileCtaStrip({
   const actionCount = [phone, whatsappHref, googleMapsUrl].filter(Boolean).length;
 
   return (
-    <section className="lg:hidden rounded-[1.5rem] border border-[#ebdcb9]/50 bg-white/94 p-4 shadow-[0_14px_36px_rgba(7,22,20,0.05)] sm:p-5">
+    <section className="lg:hidden rounded-[1.35rem] border border-[#ebdcb9]/50 bg-white p-4 shadow-[0_10px_24px_rgba(7,22,20,0.05)] sm:p-5">
       <div className="mb-4 flex items-center gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#0fa37f]/12 bg-[#eef8f4] text-[#0fa37f]">
           <MessageCircle size={18} />
@@ -202,7 +202,7 @@ function MobileContactCard({
   workingHours?: string | null;
 }) {
   return (
-    <section className="lg:hidden rounded-[1.5rem] border border-[#ebdcb9]/50 bg-white/94 p-5 shadow-[0_14px_36px_rgba(7,22,20,0.05)]">
+    <section className="lg:hidden rounded-[1.35rem] border border-[#ebdcb9]/50 bg-white p-5 shadow-[0_10px_24px_rgba(7,22,20,0.05)]">
       <div className="mb-4">
         <h2 className="text-base font-black text-[#071614]">معلومات الاتصال</h2>
         <p className="mt-1 text-xs leading-5 text-[#55605d]">التفاصيل الأساسية بعد ما تشوف الخدمة نفسها.</p>
@@ -359,7 +359,7 @@ export function ServiceDetailPage() {
             />
 
             <div className="space-y-6">
-              <div className="rounded-[2rem] border border-[#ebdcb9]/50 bg-white/92 p-6 shadow-[0_16px_45px_rgba(7,22,20,0.05)] sm:p-8">
+              <div className="rounded-[2rem] border border-[#ebdcb9]/50 bg-white/92 p-5 shadow-[0_16px_45px_rgba(7,22,20,0.05)] sm:p-8">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
                   <DetailBadge label={meta.badgeLabel} />
                   <span className="inline-flex items-center rounded-full border border-[#0fa37f]/14 bg-[#eef8f4] px-3 py-1 text-xs font-bold text-[#0f766e]">
@@ -377,27 +377,23 @@ export function ServiceDetailPage() {
                   </p>
                 )}
 
-                {(item.address || item.workingHours) && (
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    {item.address && <InfoRow icon={<MapPin size={16} />} label="العنوان" value={item.address} />}
-                    {item.workingHours && (
-                      <InfoRow icon={<Clock size={16} />} label="ساعات العمل" value={item.workingHours} />
-                    )}
-                  </div>
-                )}
+                <div className="mt-6 hidden gap-3 md:grid sm:grid-cols-2">
+                  {item.address && <InfoRow icon={<MapPin size={16} />} label="العنوان" value={item.address} />}
+                  {item.workingHours && (
+                    <InfoRow icon={<Clock size={16} />} label="ساعات العمل" value={item.workingHours} />
+                  )}
+                </div>
               </div>
-
-              <MobileCtaStrip phone={item.phone} whatsappHref={whatsappHref} googleMapsUrl={item.googleMapsUrl} />
 
               <div className="overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white shadow-[0_16px_45px_rgba(7,22,20,0.05)]">
                 <div className="relative">
                   {hasImages ? (
                     <div className="relative overflow-hidden">
-                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-black sm:aspect-[16/10] lg:aspect-[16/8.5]">
+                      <div className="relative flex h-[240px] max-h-[280px] w-full items-center justify-center overflow-hidden rounded-3xl border border-[#d6b25e]/15 bg-[#fbf8f1] sm:h-[280px] md:h-auto md:aspect-[16/9] lg:aspect-[16/8.5]">
                         <img
                           src={activeImage || gallery[0]}
                           alt={item.title}
-                          className="h-full w-full object-contain transition duration-300"
+                          className="max-h-full max-w-full h-auto w-auto object-contain object-center transition duration-300"
                           loading="eager"
                         />
                         {gallery.length > 1 && (
@@ -432,13 +428,13 @@ export function ServiceDetailPage() {
                       </div>
 
                       {gallery.length > 1 && (
-                        <div className="flex gap-2 overflow-x-auto border-t border-[#ebdcb9]/40 bg-white p-3 scrollbar-thin scrollbar-thumb-primary/10 snap-x sm:gap-3">
+                        <div className="flex gap-2 overflow-x-auto border-t border-[#ebdcb9]/40 bg-white p-2 scrollbar-thin scrollbar-thumb-primary/10 snap-x sm:gap-3 sm:p-3">
                           {gallery.map((imgUrl, idx) => (
                             <button
                               key={`${imgUrl}-${idx}`}
                               type="button"
                               onClick={() => setSelectedImageIndex(idx)}
-                              className={`relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-2xl border bg-surface-dim transition snap-start duration-300 sm:w-24 ${
+                              className={`relative aspect-[4/3] w-14 shrink-0 overflow-hidden rounded-2xl border bg-surface-dim transition snap-start duration-300 sm:w-20 md:w-24 ${
                                 selectedImageIndex === idx
                                   ? 'border-tertiary ring-2 ring-tertiary/30 scale-95 shadow-md'
                                   : 'border-[#ebdcb9]/70 hover:border-[#0fa37f]/40'
@@ -464,6 +460,8 @@ export function ServiceDetailPage() {
                   )}
                 </div>
               </div>
+
+              <MobileCtaStrip phone={item.phone} whatsappHref={whatsappHref} googleMapsUrl={item.googleMapsUrl} />
 
               {item.description && (
                 <div className="rounded-[2rem] border border-[#ebdcb9]/50 bg-white/92 p-6 shadow-[0_16px_45px_rgba(7,22,20,0.05)]">

@@ -166,7 +166,7 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
         </div>
 
         <div className="mt-auto pt-5">
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             <Link
               to={`/services/items/${item.slug}`}
               className={`${actionButtonBase} border border-[#ebdcb9]/50 bg-[#fcfaf5] text-[#5d4c18] shadow-sm hover:-translate-y-0.5 hover:border-[#d6b25e] hover:bg-white hover:text-[#0f3b35]`}
@@ -234,7 +234,7 @@ function ServicesSectionView({
   }
 
   return (
-    <section id={id} className="services-section space-y-5">
+    <section id={id} className="services-section space-y-4">
       <div className="flex items-center justify-between gap-4 border-b border-[#ebdcb9]/70 pb-3">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#0fa37f]/12 bg-[#eef8f4] shadow-sm">
@@ -247,7 +247,7 @@ function ServicesSectionView({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((service) => (
           <ServiceCard key={service.id} item={service} />
         ))}
@@ -361,7 +361,7 @@ export function ServicesHomePage() {
   return (
     <div className="text-right text-on-surface" dir="rtl">
       <div className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.12),transparent_35%),radial-gradient(circle_at_top_right,rgba(15,163,127,0.09),transparent_30%),linear-gradient(180deg,#fbf8f1_0%,#fffefb_100%)]">
-        <section className="relative overflow-hidden px-4 py-14 sm:py-16">
+        <section className="relative overflow-hidden px-4 py-10 sm:py-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.065] mix-blend-multiply"
@@ -386,8 +386,8 @@ export function ServicesHomePage() {
       </div>
 
       <div className="relative bg-[#fffdf8] pb-16">
-        <section className="mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white/88 p-5 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-8">
+        <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white/88 p-4 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-8">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.08),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.06),transparent_30%)]" />
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.08] mix-blend-multiply">
               <img src={logo} alt="" className="w-[260px] sm:w-[380px]" />
@@ -407,7 +407,7 @@ export function ServicesHomePage() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group flex h-full flex-col justify-between rounded-[1.75rem] border bg-white/90 p-5 text-center shadow-[0_12px_30px_rgba(7,22,20,0.04)] transition-all duration-300 hover:-translate-y-1 ${
+                  className={`group flex h-full flex-col justify-between rounded-[1.75rem] border bg-white/90 p-4 text-center shadow-[0_12px_30px_rgba(7,22,20,0.04)] transition-all duration-300 hover:-translate-y-1 sm:p-5 ${
                     link.tone === 'blue'
                       ? 'border-[#1877F2]/15 hover:border-[#1877F2]/30'
                       : link.tone === 'gold'
@@ -415,11 +415,11 @@ export function ServicesHomePage() {
                         : 'border-[#0fa37f]/15 hover:border-[#0fa37f]/30'
                   }`}
                 >
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#ebdcb9]/40 bg-[#fcfaf5] shadow-sm transition-transform duration-300 group-hover:scale-105">
+                  <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#ebdcb9]/40 bg-[#fcfaf5] shadow-sm transition-transform duration-300 group-hover:scale-105">
                     {link.icon}
                   </div>
                   <div className="space-y-1">
-                    <h3 className="text-lg font-black text-[#071614]">{link.title}</h3>
+                    <h3 className="text-base font-black text-[#071614] sm:text-lg">{link.title}</h3>
                     <p className="text-sm leading-6 text-[#64748b]">{link.text}</p>
                   </div>
                 </a>
@@ -429,8 +429,8 @@ export function ServicesHomePage() {
         </section>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="space-y-12">
-            <section className="relative overflow-hidden rounded-[2rem] border border-[#d6b25e]/18 bg-gradient-to-br from-[#fffaf0] via-white to-[#eef8f4] p-6 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-10">
+          <div className="space-y-10">
+            <section className="relative overflow-hidden rounded-[2rem] border border-[#d6b25e]/18 bg-gradient-to-br from-[#fffaf0] via-white to-[#eef8f4] p-5 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-10">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.08),transparent_26%)]" />
               <div className="relative z-10 mx-auto max-w-3xl text-center">
                 <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-[#0fa37f]/15 bg-white/90 px-4 py-2 text-xs font-bold text-[#0f766e] shadow-sm">
