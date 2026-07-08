@@ -27,7 +27,10 @@
     min-width: 320px;
     min-height: 100vh;
     margin: 0;
-    background: #ffffff;
+    background:
+      radial-gradient(circle at top left, rgba(212, 168, 67, 0.08), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(15, 163, 127, 0.08), transparent 28%),
+      #fbf8f1;
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
   }
@@ -52,9 +55,12 @@
   }
 }
 
-/* Hero gradient */
+/* Services hero */
 .hero-gradient {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background:
+    radial-gradient(circle at top center, rgba(214, 178, 94, 0.16), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(15, 163, 127, 0.1), transparent 28%),
+    linear-gradient(135deg, #fffaf0 0%, #ffffff 52%, #eef8f4 100%);
   position: relative;
   overflow: hidden;
 }
@@ -64,27 +70,31 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(5, 150, 105, 0.15), transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(212, 168, 67, 0.08), transparent 50%);
+    radial-gradient(circle at 18% 18%, rgba(214, 178, 94, 0.12), transparent 34%),
+    radial-gradient(circle at 82% 22%, rgba(15, 163, 127, 0.08), transparent 30%),
+    radial-gradient(circle at 50% 85%, rgba(255, 255, 255, 0.85), transparent 35%);
   pointer-events: none;
 }
 
 /* Cards */
 .service-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(253, 251, 247, 0.96));
+  border: 1px solid rgba(214, 178, 94, 0.15);
+  border-radius: 1.5rem;
+  box-shadow: 0 18px 45px rgba(7, 22, 20, 0.05);
   contain: layout paint style;
-  transition: border-color 0.12s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .service-card:hover {
-  border-color: #059669;
+  border-color: rgba(15, 163, 127, 0.28);
+  box-shadow: 0 22px 55px rgba(7, 22, 20, 0.07);
+  transform: translateY(-2px);
 }
 
 .services-section {
   content-visibility: auto;
-  contain-intrinsic-size: 720px;
+  contain-intrinsic-size: 760px;
 }
 
 /* Step badge */
@@ -92,7 +102,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, #0fa37f, #0a8a6b);
   color: white;
   display: flex;
   align-items: center;
@@ -106,8 +116,8 @@
 .form-input {
   width: 100%;
   border-radius: 0.75rem !important;
-  border: 1px solid #e2e8f0 !important;
-  background-color: #ffffff !important;
+  border: 1px solid rgba(214, 178, 94, 0.2) !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
   color: #0f172a !important;
   text-align: right;
   padding: 0.75rem 1rem !important;
@@ -115,9 +125,9 @@
 }
 
 .form-input:focus {
-  border-color: #059669 !important;
-  --tw-ring-color: rgba(5, 150, 105, 0.2) !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2) !important;
+  border-color: rgba(15, 163, 127, 0.35) !important;
+  --tw-ring-color: rgba(15, 163, 127, 0.16) !important;
+  box-shadow: 0 0 0 3px rgba(15, 163, 127, 0.12) !important;
   outline: none !important;
 }
 

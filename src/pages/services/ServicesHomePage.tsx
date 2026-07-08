@@ -2,13 +2,14 @@ import { memo, startTransition, useCallback, useEffect, useRef, useState } from 
 import type { ReactNode, SVGProps, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  MapPin,
+  Building,
   Clock,
-  Phone,
+  MapPin,
   MessageCircle,
   Navigation,
+  Phone,
+  Sparkles,
   Wrench,
-  Building,
 } from 'lucide-react';
 import { getCachedServicesHome, getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
@@ -21,22 +22,23 @@ const sectionCopy = {
   facilities: {
     title: 'الخدمات العامة',
     empty: 'لا توجد مرافق مسجلة حالياً.',
-    icon: <Building size={24} className="text-accent" />,
+    icon: <Building size={22} className="text-[#0fa37f]" />,
   },
   technical: {
     title: 'الخدمات الفنية',
     empty: 'لا توجد خدمات فنية مسجلة حالياً.',
-    icon: <Wrench size={24} className="text-accent" />,
+    icon: <Wrench size={22} className="text-[#0fa37f]" />,
   },
   realEstate: {
     title: 'خدمة العقارات',
     empty: 'لا توجد خدمات عقارية مسجلة حالياً.',
-    icon: <Building size={24} className="text-accent" />,
+    icon: <Building size={22} className="text-[#0fa37f]" />,
   },
 } as const;
 
 const SERVICES_ERROR_MESSAGE =
-  'ØªØ¹Ø°Ø± ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¯Ù„ÙŠÙ„ Ø­Ø§Ù„ÙŠØ§Ù‹. ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„Ø§ØªØµØ§Ù„ Ø¨Ø§Ù„Ø®Ø§Ø¯Ù….';
+  'تعذر تحميل مجمع الخدمات الآن. يرجى إعادة المحاولة أو التحقق من الاتصال بالخادم.';
+
 type ServicesHomeDataSource = 'cache' | 'fallback' | 'api';
 
 interface ServicesHomeState {
@@ -84,6 +86,9 @@ const FacebookIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const actionButtonBase =
+  'inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4';
+
 function ServiceCardView({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
   const isRealEstate = item.serviceType === 'REAL_ESTATE';
@@ -92,110 +97,120 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
   const badgeLabel = isFacility ? 'مرفق' : isRealEstate ? 'خدمة عقارية' : 'خدمة فنية';
 
   return (
-    <div className="service-card flex h-full flex-col justify-between overflow-hidden">
-      <div>
-        <div className="relative flex h-44 items-center justify-center overflow-hidden bg-accent/5">
-          {coverImage ? (
-            <img
-              src={coverImage}
-              alt={item.title}
-              className="h-full w-full object-cover"
-              loading="lazy"
-              decoding="async"
-              fetchPriority="low"
-              width="640"
-              height="360"
-              onError={hideBrokenImage}
-            />
-          ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-accent">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-[#ebdcb9]/30 bg-white/90 shadow-[0_16px_45px_rgba(7,22,20,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0fa37f]/20 hover:shadow-[0_22px_60px_rgba(7,22,20,0.08)]">
+      <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#d6b25e]/70 to-transparent" />
+      <span aria-hidden className="pointer-events-none absolute inset-x-10 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#0fa37f]/35 to-transparent opacity-60 blur-[1px]" />
+
+      <div className="relative overflow-hidden rounded-t-[28px] bg-gradient-to-br from-[#fffaf0] via-white to-[#eef8f4]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.12),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.08),transparent_30%)]" />
+        {coverImage ? (
+          <img
+            src={coverImage}
+            alt={item.title}
+            className="relative z-10 h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+            width="640"
+            height="360"
+            onError={hideBrokenImage}
+          />
+        ) : (
+          <div className="relative z-10 flex h-44 w-full items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-[#d6b25e]/15 bg-white/80 text-[#0fa37f] shadow-sm">
               {isFacility || isRealEstate ? <Building size={32} /> : <Wrench size={32} />}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+        <div className="absolute inset-x-0 bottom-0 z-20 h-14 bg-gradient-to-t from-white/90 to-transparent" />
+      </div>
 
-        <div className="p-5">
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="mb-4 flex items-center justify-between gap-3">
           <span
-            className={`mb-3 inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold ${
+            className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold ${
               isFacility
-                ? 'bg-accent/10 text-accent'
+                ? 'border-[#0fa37f]/15 bg-[#0fa37f]/8 text-[#0f766e]'
                 : isRealEstate
-                  ? 'bg-secondary/10 text-secondary'
-                  : 'bg-primary/10 text-primary'
+                  ? 'border-[#d6b25e]/18 bg-[#fff7e6] text-[#8a6d22]'
+                  : 'border-[#0fa37f]/15 bg-[#eef8f4] text-[#0f766e]'
             }`}
           >
             {badgeLabel}
           </span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-[#ebdcb9]/40 bg-[#fcfaf5] px-3 py-1 text-[11px] font-semibold text-[#6b7280]">
+            <Sparkles size={12} className="text-[#d6b25e]" />
+            دليل السبحي
+          </span>
+        </div>
 
-          <h3 className="mb-2 line-clamp-1 font-bold text-on-surface">{item.title}</h3>
-          {item.shortDescription && (
-            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-on-surface-muted">
-              {item.shortDescription}
-            </p>
+        <h3 className="mb-2 line-clamp-1 text-lg font-black text-[#071614] sm:text-xl">{item.title}</h3>
+
+        {item.shortDescription && (
+          <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-[#55605d]">{item.shortDescription}</p>
+        )}
+
+        <div className="space-y-2 text-xs text-[#64748b]">
+          {item.workingHours && (
+            <div className="flex items-center gap-1.5">
+              <Clock size={14} className="text-[#0fa37f]" />
+              <span>{item.workingHours}</span>
+            </div>
           )}
+          {isFacility && item.address && (
+            <div className="flex items-center gap-1.5">
+              <MapPin size={14} className="text-[#0fa37f]" />
+              <span className="truncate">{item.address}</span>
+            </div>
+          )}
+        </div>
 
-          <div className="space-y-2 text-xs text-on-surface-muted">
-            {item.workingHours && (
-              <div className="flex items-center gap-1.5">
-                <Clock size={14} className="text-accent" />
-                <span>{item.workingHours}</span>
-              </div>
+        <div className="mt-auto pt-5">
+          <div className="flex flex-wrap gap-2">
+            <Link
+              to={`/services/items/${item.slug}`}
+              className={`${actionButtonBase} border border-[#ebdcb9]/50 bg-[#fcfaf5] text-[#5d4c18] shadow-sm hover:-translate-y-0.5 hover:border-[#d6b25e] hover:bg-white hover:text-[#0f3b35]`}
+            >
+              عرض التفاصيل
+            </Link>
+
+            {item.phone && (
+              <a
+                href={`tel:${item.phone}`}
+                className={`${actionButtonBase} border border-[#0fa37f]/15 bg-[#eef8f4] text-[#0f766e] hover:-translate-y-0.5 hover:border-[#0fa37f]/30 hover:bg-[#e4f4ed]`}
+              >
+                <Phone size={14} />
+                اتصال
+              </a>
             )}
-            {isFacility && item.address && (
-              <div className="flex items-center gap-1.5">
-                <MapPin size={14} className="text-accent" />
-                <span className="truncate">{item.address}</span>
-              </div>
+
+            {whatsappHref && (
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${actionButtonBase} border border-emerald-500/15 bg-emerald-50 text-emerald-700 hover:-translate-y-0.5 hover:border-emerald-500/25 hover:bg-emerald-100`}
+              >
+                <MessageCircle size={14} />
+                واتساب
+              </a>
+            )}
+
+            {item.googleMapsUrl && (
+              <a
+                href={item.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${actionButtonBase} border border-sky-500/15 bg-sky-50 text-sky-700 hover:-translate-y-0.5 hover:border-sky-500/25 hover:bg-sky-100`}
+              >
+                <Navigation size={14} />
+                اتجاهات
+              </a>
             )}
           </div>
         </div>
       </div>
-
-      <div className="mt-auto border-t border-surface-border/50 p-5 pt-0">
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            to={`/services/items/${item.slug}`}
-            className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-surface-muted text-sm font-semibold text-on-surface transition-colors hover:bg-surface-border"
-          >
-            عرض التفاصيل
-          </Link>
-
-          {item.phone && (
-            <a
-              href={`tel:${item.phone}`}
-              className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-accent/10 text-sm font-semibold text-accent transition-colors hover:bg-accent/20"
-            >
-              <Phone size={14} />
-              اتصال
-            </a>
-          )}
-
-          {whatsappHref && (
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-emerald-500/10 text-sm font-semibold text-emerald-600 transition-colors hover:bg-emerald-500/20"
-            >
-              <MessageCircle size={14} />
-              واتساب
-            </a>
-          )}
-
-          {item.googleMapsUrl && (
-            <a
-              href={item.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg bg-sky-500/10 text-sm font-semibold text-sky-600 transition-colors hover:bg-sky-500/20"
-            >
-              <Navigation size={14} />
-              اتجاهات
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
+    </article>
   );
 }
 
@@ -206,24 +221,33 @@ function ServicesSectionView({
   title,
   icon,
   items,
+  empty,
 }: {
   id: string;
   title: string;
   icon: ReactNode;
   items: ServiceItem[];
+  empty: string;
 }) {
   if (items.length === 0) {
     return null;
   }
 
   return (
-    <section id={id} className="services-section space-y-6">
-      <div className="flex items-center gap-2 border-b border-surface-border pb-2">
-        {icon}
-        <h2 className="text-2xl font-bold text-on-surface">{title}</h2>
+    <section id={id} className="services-section space-y-5">
+      <div className="flex items-center justify-between gap-4 border-b border-[#ebdcb9]/70 pb-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#0fa37f]/12 bg-[#eef8f4] shadow-sm">
+            {icon}
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-xl font-black leading-tight text-[#071614] sm:text-2xl">{title}</h2>
+            <p className="text-sm text-[#6b7280]">{empty}</p>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((service) => (
           <ServiceCard key={service.id} item={service} />
         ))}
@@ -238,6 +262,7 @@ export function ServicesHomePage() {
   const [state, setState] = useState<ServicesHomeState>(createInitialServicesState);
   const initialSource = useRef(state.source);
   const { data, error } = state;
+
   useEffect(() => {
     let isActive = true;
 
@@ -293,14 +318,14 @@ export function ServicesHomePage() {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4">
         <div className="max-w-md space-y-4 text-center animate-fade-in">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-error-container text-error">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#0fa37f]/15 bg-[#eef8f4] text-[#0fa37f] shadow-sm">
             <Wrench size={32} />
           </div>
-          <h2 className="text-xl font-bold text-on-surface">خطأ في التحميل</h2>
-          <p className="text-sm leading-relaxed text-on-surface-muted">{error || SERVICES_ERROR_MESSAGE}</p>
+          <h2 className="text-xl font-black text-[#071614]">خطأ في التحميل</h2>
+          <p className="text-sm leading-relaxed text-[#55605d]">{error || SERVICES_ERROR_MESSAGE}</p>
           <button
             onClick={handleRetry}
-            className="rounded-xl bg-accent px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent/90"
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-6 py-3 text-sm font-bold text-white shadow-[0_12px_28px_rgba(15,163,127,0.16)] transition-all duration-300 hover:-translate-y-0.5"
           >
             إعادة المحاولة
           </button>
@@ -309,136 +334,152 @@ export function ServicesHomePage() {
     );
   }
 
+  const quickLinks = [
+    {
+      href: 'https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu',
+      icon: <MessageCircle size={24} className="text-[#0fa37f]" />,
+      title: 'جروب الواتساب',
+      text: 'للتواصل السريع والمتابعة اليومية',
+      tone: 'emerald',
+    },
+    {
+      href: 'https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi',
+      icon: <FacebookIcon className="h-6 w-6 text-[#1877F2]" />,
+      title: 'جروب الفيس بوك',
+      text: 'للنقاشات والإشعارات العامة',
+      tone: 'blue',
+    },
+    {
+      href: 'https://www.dalilsubhi.com/',
+      icon: <img src={logo} alt="" className="h-6 w-6 object-cover" />,
+      title: 'دليل السبحي',
+      text: 'الصفحة الرئيسية للمجمع',
+      tone: 'gold',
+    },
+  ] as const;
+
   return (
-    <div className="text-right" dir="rtl">
-      <section className="hero-gradient relative overflow-hidden px-4 py-20 text-center text-white md:py-24">
-        <div className="relative z-10 mx-auto max-w-4xl">
-          <h1 className="text-3xl font-black leading-tight md:text-5xl">
-            مجمع الخدمات للمنطقة
-          </h1>
-        </div>
-      </section>
+    <div className="text-right text-on-surface" dir="rtl">
+      <div className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.12),transparent_35%),radial-gradient(circle_at_top_right,rgba(15,163,127,0.09),transparent_30%),linear-gradient(180deg,#fbf8f1_0%,#fffefb_100%)]">
+        <section className="relative overflow-hidden px-4 py-14 sm:py-16">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.065] mix-blend-multiply"
+          >
+            <img src={logo} alt="" className="w-[320px] rotate-[-4deg] blur-[1px] sm:w-[460px]" />
+          </div>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.8),transparent_40%)]" />
 
-      <div className="relative bg-white pb-16">
+          <div className="relative z-10 mx-auto max-w-4xl text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d6b25e]/20 bg-white/85 px-4 py-2 text-xs font-bold text-[#8a6d22] shadow-sm backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-[#0fa37f]" />
+              مجمع الخدمات للمنطقة
+            </div>
+            <h1 className="text-3xl font-black leading-tight tracking-tight text-[#071614] sm:text-4xl md:text-5xl">
+              مجمع الخدمات للمنطقة
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#55605d] sm:text-base md:text-lg">
+              ابحث بسرعة عن خدمة، مرفق، أو جهة تواصل داخل دليل السبحي عبر تجربة خفيفة وواضحة ومبنية على الهوية نفسها.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div className="relative bg-[#fffdf8] pb-16">
         <section className="mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl px-2 py-8">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center"
-            >
-              <img
-                src={logo}
-                alt=""
-                className="w-[320px] object-contain opacity-[0.11] md:w-[460px]"
-                loading="lazy"
-                decoding="async"
-                width="460"
-                height="460"
-              />
+          <div className="relative overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white/88 p-5 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-8">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.08),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.06),transparent_30%)]" />
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.08] mix-blend-multiply">
+              <img src={logo} alt="" className="w-[260px] sm:w-[380px]" />
             </div>
 
-            <div className="relative z-10 mx-auto mb-8 max-w-xl text-center">
-              <h2 className="text-2xl font-black text-on-surface md:text-3xl">روابط مهمة</h2>
+            <div className="relative z-10 mx-auto max-w-2xl text-center">
+              <h2 className="text-2xl font-black text-[#071614] sm:text-3xl">روابط مهمة</h2>
+              <p className="mt-2 text-sm leading-7 text-[#55605d]">
+                وصول مباشر إلى القنوات الأساسية مع نفس اللمسة الهادئة الموجودة في اللاندينج والبوابة المجتمعية.
+              </p>
             </div>
 
-            <div className="relative z-10 mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-3">
-              <a
-                href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-colors hover:border-emerald-500/50 hover:bg-surface-container-high"
-              >
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                  <MessageCircle size={28} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-on-surface transition-colors group-hover:text-emerald-600">جروب الواتساب</h3>
-                </div>
-              </a>
-
-              <a
-                href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-colors hover:border-blue-500/50 hover:bg-surface-container-high"
-              >
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                  <FacebookIcon />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-on-surface transition-colors group-hover:text-blue-600">جروب الفيس بوك</h3>
-                </div>
-              </a>
-
-              <a
-                href="https://www.dalilsubhi.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-surface-border bg-surface-container-low p-6 text-center shadow-sm transition-colors hover:border-primary/50 hover:bg-surface-container-high"
-              >
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-outline-variant bg-white">
-                  <img
-                    src={logo}
-                    alt="دليل السبحي"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    width="56"
-                    height="56"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-on-surface transition-colors group-hover:text-primary">دليل السبحي</h3>
-                  <p className="mt-1 text-sm text-on-surface-muted">الصفحة الرئيسية</p>
-                </div>
-              </a>
+            <div className="relative z-10 mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+              {quickLinks.map((link) => (
+                <a
+                  key={link.title}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group flex h-full flex-col justify-between rounded-[1.75rem] border bg-white/90 p-5 text-center shadow-[0_12px_30px_rgba(7,22,20,0.04)] transition-all duration-300 hover:-translate-y-1 ${
+                    link.tone === 'blue'
+                      ? 'border-[#1877F2]/15 hover:border-[#1877F2]/30'
+                      : link.tone === 'gold'
+                        ? 'border-[#d6b25e]/18 hover:border-[#d6b25e]/35'
+                        : 'border-[#0fa37f]/15 hover:border-[#0fa37f]/30'
+                  }`}
+                >
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#ebdcb9]/40 bg-[#fcfaf5] shadow-sm transition-transform duration-300 group-hover:scale-105">
+                    {link.icon}
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-black text-[#071614]">{link.title}</h3>
+                    <p className="text-sm leading-6 text-[#64748b]">{link.text}</p>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </section>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="space-y-12">
-              <div className="relative overflow-hidden rounded-[2rem] border border-sky-200/50 bg-gradient-to-br from-sky-50 to-indigo-50/30 p-8 sm:p-12 shadow-sm mb-8">
-                <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto space-y-6">
-                  <h2 className="text-3xl font-black text-slate-900 md:text-4xl">البوابة المجتمعية</h2>
-                  <p className="text-lg text-slate-600 leading-relaxed">
-                    جامعات، مطاعم، طوارئ، إرشادات وروابط مهمة في مكان واحد.
-                  </p>
-                  <Link to={ROUTES.COMMUNITY} className="inline-flex h-14 items-center justify-center rounded-2xl bg-slate-900 px-8 text-base font-bold text-white shadow-sm transition-colors hover:bg-slate-800">
-                    استكشف البوابة المجتمعية
-                  </Link>
+            <section className="relative overflow-hidden rounded-[2rem] border border-[#d6b25e]/18 bg-gradient-to-br from-[#fffaf0] via-white to-[#eef8f4] p-6 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-10">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.08),transparent_26%)]" />
+              <div className="relative z-10 mx-auto max-w-3xl text-center">
+                <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-[#0fa37f]/15 bg-white/90 px-4 py-2 text-xs font-bold text-[#0f766e] shadow-sm">
+                  <MapPin size={14} className="text-[#0fa37f]" />
+                  البوابة المجتمعية
                 </div>
+                <h2 className="text-2xl font-black text-[#071614] sm:text-3xl md:text-4xl">البوابة المجتمعية</h2>
+                <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#55605d] sm:text-base">
+                  جامعات، مطاعم، طوارئ وإرشادات وروابط مهمة في مكان واحد، بنفس لغة السبحي الهادئة والمضبوطة.
+                </p>
+                <Link
+                  to={ROUTES.COMMUNITY}
+                  className="mt-6 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-6 py-3 text-sm font-bold text-white shadow-[0_12px_28px_rgba(15,163,127,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(15,163,127,0.2)]"
+                >
+                  استكشف البوابة المجتمعية
+                </Link>
               </div>
+            </section>
 
-              <ServicesSection
-                id="facilities"
-                title={sectionCopy.facilities.title}
-                icon={sectionCopy.facilities.icon}
-                items={facilities}
-              />
+            <ServicesSection
+              id="facilities"
+              title={sectionCopy.facilities.title}
+              icon={sectionCopy.facilities.icon}
+              items={facilities}
+              empty={sectionCopy.facilities.empty}
+            />
 
-              <ServicesSection
-                id="technical-services"
-                title={sectionCopy.technical.title}
-                icon={sectionCopy.technical.icon}
-                items={technicalServices}
-              />
+            <ServicesSection
+              id="technical-services"
+              title={sectionCopy.technical.title}
+              icon={sectionCopy.technical.icon}
+              items={technicalServices}
+              empty={sectionCopy.technical.empty}
+            />
 
-              <ServicesSection
-                id="real-estate-services"
-                title={sectionCopy.realEstate.title}
-                icon={sectionCopy.realEstate.icon}
-                items={realEstateServices}
-              />
+            <ServicesSection
+              id="real-estate-services"
+              title={sectionCopy.realEstate.title}
+              icon={sectionCopy.realEstate.icon}
+              items={realEstateServices}
+              empty={sectionCopy.realEstate.empty}
+            />
 
-              {!hasAnyServices && (
-                <div className="rounded-2xl border border-surface-border bg-surface-muted py-20 text-center">
-                  <p className="font-semibold text-on-surface-muted">
-                    لا توجد خدمات أو مرافق مسجلة حالياً.
-                  </p>
-                </div>
-              )}
-            </div>
+            {!hasAnyServices && (
+              <div className="rounded-[2rem] border border-[#ebdcb9]/60 bg-white/90 py-20 text-center shadow-sm">
+                <p className="font-semibold text-[#55605d]">لا توجد خدمات أو مرافق مسجلة حالياً.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
