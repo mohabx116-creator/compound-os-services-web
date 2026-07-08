@@ -20,7 +20,7 @@ export function PublicServicesShell() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fbf8f1] text-right text-on-surface" dir="rtl">
-      <header className="sticky top-0 z-50 border-b border-[#d6b25e]/15 bg-white/86 text-on-surface shadow-[0_10px_30px_rgba(7,22,20,0.04)] backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-[#d6b25e]/15 bg-white text-on-surface shadow-[0_10px_30px_rgba(7,22,20,0.04)] backdrop-blur-0 md:bg-white/86 md:backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between gap-3 sm:h-20">
             <Link to="/" className="flex items-center gap-3 rounded-2xl px-1 py-1 transition-transform duration-300 hover:scale-[1.01]">
