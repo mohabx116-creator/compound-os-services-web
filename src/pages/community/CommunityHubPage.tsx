@@ -27,6 +27,7 @@ import {
   type CommunityHubItem,
 } from '../../data/community-hub';
 import { ROUTES } from '../../lib/constants/routes';
+import { getWhatsappHref } from '../../lib/whatsapp';
 
 const heroHighlights = [
   {
@@ -246,6 +247,11 @@ function ActionModal({
               <h4 className="text-sm font-semibold text-slate-500">أرقام التواصل</h4>
               {phones.map((phone, i) => (
                 <div key={i} className="flex items-center justify-between gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 flex-wrap">
+                  {(() => {
+                    const whatsappHref = phone.type === 'whatsapp' ? getWhatsappHref(phone.number) : null;
+
+                    return (
+                      <>
                   <div className="flex flex-col text-right w-full sm:w-auto flex-1">
                     <span className="text-xs font-semibold text-slate-500 mb-0.5">{phone.label}</span>
                     <span className="font-bold text-slate-700" dir="ltr">{phone.number}</span>
@@ -254,8 +260,8 @@ function ActionModal({
                     <button onClick={() => navigator.clipboard.writeText(normalizePhone(phone.number))} className="flex items-center gap-2 bg-white text-slate-600 border border-slate-200 px-3 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors">
                       نسخ الرقم
                     </button>
-                    {phone.type === 'whatsapp' ? (
-                      <a href={`https://wa.me/2${normalizePhone(phone.number)}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-colors">
+                    {whatsappHref ? (
+                      <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-colors">
                         <MessageCircle size={16} />
                         واتساب
                       </a>
@@ -266,6 +272,9 @@ function ActionModal({
                       </a>
                     )}
                   </div>
+                      </>
+                    );
+                  })()}
                 </div>
               ))}
             </div>
@@ -454,7 +463,7 @@ function CommunityCard({ item, onShowMore, onShowGuidance }: { item: CommunityHu
                   عرض الإرشادات
                 </a>
               ) : phones.length === 1 ? (
-                <a href={phones[0].type === 'whatsapp' ? `https://wa.me/2${normalizePhone(phones[0].number)}` : `tel:${normalizePhone(phones[0].number)}`} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-emerald-700">
+                <a href={phones[0].type === 'whatsapp' ? (getWhatsappHref(phones[0].number) ?? '#') : `tel:${normalizePhone(phones[0].number)}`} className="flex-1 min-w-[120px] inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold transition-colors hover:bg-emerald-700">
                   {phones[0].type === 'whatsapp' ? <MessageCircle size={16} /> : <PhoneCall size={16} />}
                   {phones[0].type === 'whatsapp' ? 'واتساب' : 'اتصل الآن'}
                 </a>

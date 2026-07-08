@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { getItem } from '../../lib/api/services-service';
 import type { ServiceItem } from '../../lib/api/types';
+import { getWhatsappHref } from '../../lib/whatsapp';
 
 export function ServiceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -85,6 +86,7 @@ export function ServiceDetailPage() {
     : isRealEstate
       ? 'خدمة العقارات'
       : 'الخدمات الفنية';
+  const whatsappHref = getWhatsappHref(item.whatsapp);
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 animate-fade-in">
@@ -204,7 +206,7 @@ export function ServiceDetailPage() {
               </div>
             )}
 
-            {item.whatsapp && (
+            {whatsappHref && (
               <div className="flex items-start gap-3">
                 <MessageCircle size={18} className="text-accent mt-0.5 flex-shrink-0" />
                 <div>
@@ -239,9 +241,9 @@ export function ServiceDetailPage() {
               </a>
             )}
 
-            {item.whatsapp && (
+            {whatsappHref && (
               <a
-                href={`https://wa.me/${item.whatsapp.replace('+', '')}`}
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors"

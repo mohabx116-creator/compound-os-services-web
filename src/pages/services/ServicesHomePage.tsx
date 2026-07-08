@@ -13,6 +13,7 @@ import {
 import { getCachedServicesHome, getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
 import { ROUTES } from '../../lib/constants/routes';
+import { getWhatsappHref } from '../../lib/whatsapp';
 import { SERVICES_HOME_FALLBACK } from '../../data/services-home-fallback';
 import logo from '../../assets/dalil-subhi-logo-192.jpg';
 
@@ -87,7 +88,7 @@ function ServiceCardView({ item }: { item: ServiceItem }) {
   const isFacility = item.kind === 'FACILITY';
   const isRealEstate = item.serviceType === 'REAL_ESTATE';
   const coverImage = item.images?.[0] ? getOptimizedServiceImageUrl(item.images[0]) : null;
-  const whatsappHref = item.whatsapp ? `https://wa.me/${item.whatsapp.replace(/\D/g, '')}` : null;
+  const whatsappHref = getWhatsappHref(item.whatsapp);
   const badgeLabel = isFacility ? 'مرفق' : isRealEstate ? 'خدمة عقارية' : 'خدمة فنية';
 
   return (
