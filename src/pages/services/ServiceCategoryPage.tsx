@@ -162,7 +162,7 @@ export function ServiceCategoryPage() {
   }
 
   // Determine category name and filter criteria
-  let categoryName = slug === 'facilities' ? 'المرافق العامة' : 'الخدمات الفنية';
+  let categoryName = slug === 'facilities' ? 'الخدمات العامة' : 'الخدمات الفنية';
   let categoryDescription = slug === 'facilities'
     ? 'استعرض جميع المرافق والمنشآت المتوفرة داخل الكمبوند للخدمة العامة.'
     : 'تواصل مباشرة مع فنيي الصيانة والأعمال المنزلية المتخصصين بالكمبوند.';

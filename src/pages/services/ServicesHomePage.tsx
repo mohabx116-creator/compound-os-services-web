@@ -17,7 +17,7 @@ import logo from '../../assets/dalil-subhi-logo-192.jpg';
 
 const sectionCopy = {
   facilities: {
-    title: 'المرافق العامة',
+    title: 'الخدمات العامة',
     empty: 'لا توجد مرافق مسجلة حالياً.',
     icon: <Building size={24} className="text-accent" />,
   },

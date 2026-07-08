@@ -81,7 +81,7 @@ export function ServiceDetailPage() {
       ? '/services#real-estate-services'
       : '/services/categories/technical';
   const categoryLabel = isFacility
-    ? 'المرافق العامة'
+    ? 'الخدمات العامة'
     : isRealEstate
       ? 'خدمة العقارات'
       : 'الخدمات الفنية';
