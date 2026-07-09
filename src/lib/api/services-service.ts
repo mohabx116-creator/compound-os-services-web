@@ -7,7 +7,7 @@ import type {
 } from './types';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://compound-os-api.onrender.com/api/v1',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://compound-os-api-replica.onrender.com/api/v1',
   timeout: 30_000,
   headers: {
     'Content-Type': 'application/json',
