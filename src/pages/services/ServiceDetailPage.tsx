@@ -45,7 +45,7 @@ function InfoRow({
       <div className="mt-0.5 shrink-0 text-[#0fa37f]">{icon}</div>
       <div className="min-w-0">
         <p className="text-xs font-medium text-[#64748b]">{label}</p>
-        <p className="mt-0.5 text-sm font-semibold leading-6 text-[#071614]">{value}</p>
+        <p className="mt-0.5 break-words text-sm font-semibold leading-6 text-[#071614]">{value}</p>
       </div>
     </div>
   );
@@ -138,7 +138,7 @@ function MobileCtaStrip({
   const actionCount = [phone, whatsappHref, googleMapsUrl].filter(Boolean).length;
 
   return (
-    <section className="lg:hidden rounded-[1.35rem] border border-[#ebdcb9]/50 bg-white p-4 shadow-[0_10px_24px_rgba(7,22,20,0.05)] sm:p-5">
+    <section className="lg:hidden w-full max-w-full min-w-0 overflow-hidden rounded-[1.35rem] border border-[#ebdcb9]/50 bg-white p-4 shadow-[0_10px_24px_rgba(7,22,20,0.05)] sm:p-5">
       <div className="mb-4 flex items-center gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#0fa37f]/12 bg-[#eef8f4] text-[#0fa37f]">
           <MessageCircle size={18} />
@@ -151,11 +151,11 @@ function MobileCtaStrip({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid w-full grid-cols-2 gap-3">
         {phone && (
           <a
             href={`tel:${phone}`}
-            className={`${actionButtonBase} w-full justify-center border border-[#0fa37f]/18 bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] text-white shadow-[0_10px_24px_rgba(15,163,127,0.16)]`}
+            className="flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-[#0fa37f]/18 bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-3 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(15,163,127,0.16)] transition-all duration-300"
           >
             <Phone size={17} />
             اتصال
@@ -167,7 +167,7 @@ function MobileCtaStrip({
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${actionButtonBase} w-full justify-center border border-emerald-500/18 bg-emerald-50 text-emerald-700`}
+            className="flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-emerald-500/18 bg-emerald-50 px-3 py-3 text-sm font-bold text-emerald-700 transition-all duration-300"
           >
             <MessageCircle size={17} />
             واتساب
@@ -179,7 +179,9 @@ function MobileCtaStrip({
             href={googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${actionButtonBase} w-full justify-center border border-sky-500/18 bg-sky-50 text-sky-700 ${actionCount >= 1 ? 'col-span-2' : ''}`}
+            className={`flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-sky-500/18 bg-sky-50 px-3 py-3 text-sm font-bold text-sky-700 transition-all duration-300 ${
+              actionCount >= 1 ? 'col-span-2' : ''
+            }`}
           >
             <Navigation size={17} />
             اتجاهات
@@ -202,7 +204,7 @@ function MobileContactCard({
   workingHours?: string | null;
 }) {
   return (
-    <section className="lg:hidden rounded-[1.35rem] border border-[#ebdcb9]/50 bg-white p-5 shadow-[0_10px_24px_rgba(7,22,20,0.05)]">
+    <section className="lg:hidden w-full max-w-full min-w-0 overflow-hidden rounded-[1.35rem] border border-[#ebdcb9]/50 bg-white p-5 shadow-[0_10px_24px_rgba(7,22,20,0.05)]">
       <div className="mb-4">
         <h2 className="text-base font-black text-[#071614]">معلومات الاتصال</h2>
         <p className="mt-1 text-xs leading-5 text-[#55605d]">التفاصيل الأساسية بعد ما تشوف الخدمة نفسها.</p>
@@ -329,13 +331,13 @@ export function ServiceDetailPage() {
       className="bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.1),transparent_35%),radial-gradient(circle_at_top_right,rgba(15,163,127,0.08),transparent_30%),linear-gradient(180deg,#fbf8f1_0%,#fffefb_100%)] text-right text-on-surface"
       dir="rtl"
     >
-      <section className="relative overflow-hidden px-4 py-10 sm:px-6 md:py-14 lg:px-8">
+      <section className="relative w-full overflow-hidden px-4 py-10 sm:px-6 md:py-14 lg:px-8">
         <div className="pointer-events-none absolute inset-0 hidden justify-center overflow-hidden opacity-[0.06] mix-blend-multiply lg:flex">
           <img src={logo} alt="" className="mt-10 w-[260px] sm:w-[420px]" />
         </div>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.78),transparent_42%)] max-md:hidden" />
 
-        <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="relative z-10 mx-auto w-full max-w-7xl">
           <nav className="mb-5 flex flex-wrap items-center gap-2 text-sm text-[#64748b]">
             <Link to="/services" className="transition-colors hover:text-[#0f766e]">
               الخدمات
@@ -348,7 +350,7 @@ export function ServiceDetailPage() {
             <span className="font-semibold text-[#071614]">{item.title}</span>
           </nav>
 
-          <div className="grid gap-6 xl:grid-cols-[390px_minmax(0,1.18fr)]">
+          <div className="grid min-w-0 gap-6 xl:grid-cols-[390px_minmax(0,1.18fr)]">
             <ActionPanel
               phone={item.phone}
               whatsappHref={whatsappHref}
@@ -358,8 +360,8 @@ export function ServiceDetailPage() {
               workingHours={item.workingHours}
             />
 
-            <div className="space-y-6">
-              <div className="rounded-[2rem] border border-[#ebdcb9]/50 bg-white/92 p-5 shadow-[0_16px_45px_rgba(7,22,20,0.05)] sm:p-8">
+            <div className="min-w-0 space-y-6">
+              <div className="w-full max-w-full min-w-0 overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white/92 p-5 shadow-[0_16px_45px_rgba(7,22,20,0.05)] sm:p-8">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
                   <DetailBadge label={meta.badgeLabel} />
                   <span className="inline-flex items-center rounded-full border border-[#0fa37f]/14 bg-[#eef8f4] px-3 py-1 text-xs font-bold text-[#0f766e]">
@@ -385,15 +387,15 @@ export function ServiceDetailPage() {
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white shadow-[0_16px_45px_rgba(7,22,20,0.05)]">
+              <div className="w-full max-w-full min-w-0 overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white shadow-[0_16px_45px_rgba(7,22,20,0.05)]">
                 <div className="relative">
                   {hasImages ? (
                     <div className="relative overflow-hidden">
-                      <div className="relative flex h-[240px] max-h-[280px] w-full items-center justify-center overflow-hidden rounded-3xl border border-[#d6b25e]/15 bg-[#fbf8f1] sm:h-[280px] md:h-auto md:aspect-[16/9] lg:aspect-[16/8.5]">
+                      <div className="relative mx-auto flex h-[240px] w-full max-w-full min-w-0 items-center justify-center overflow-hidden rounded-3xl border border-[#d6b25e]/15 bg-[#fbf8f1] sm:h-[280px] md:h-auto md:aspect-[16/9] lg:aspect-[16/8.5]">
                         <img
                           src={activeImage || gallery[0]}
                           alt={item.title}
-                          className="max-h-full max-w-full h-auto w-auto object-contain object-center transition duration-300"
+                          className="h-full w-full object-contain object-center transition duration-300"
                           loading="eager"
                         />
                         {gallery.length > 1 && (
@@ -428,13 +430,13 @@ export function ServiceDetailPage() {
                       </div>
 
                       {gallery.length > 1 && (
-                        <div className="flex gap-2 overflow-x-auto border-t border-[#ebdcb9]/40 bg-white p-2 scrollbar-thin scrollbar-thumb-primary/10 snap-x sm:gap-3 sm:p-3">
+                        <div className="flex max-w-full gap-2 overflow-x-auto border-t border-[#ebdcb9]/40 bg-white p-2 scrollbar-thin scrollbar-thumb-primary/10 snap-x sm:gap-3 sm:p-3">
                           {gallery.map((imgUrl, idx) => (
                             <button
                               key={`${imgUrl}-${idx}`}
                               type="button"
                               onClick={() => setSelectedImageIndex(idx)}
-                              className={`relative aspect-[4/3] w-14 shrink-0 overflow-hidden rounded-2xl border bg-surface-dim transition snap-start duration-300 sm:w-20 md:w-24 ${
+                              className={`relative aspect-[4/3] h-14 w-14 shrink-0 overflow-hidden rounded-2xl border bg-surface-dim transition snap-start duration-300 sm:h-20 sm:w-20 md:h-24 md:w-24 ${
                                 selectedImageIndex === idx
                                   ? 'border-tertiary ring-2 ring-tertiary/30 scale-95 shadow-md'
                                   : 'border-[#ebdcb9]/70 hover:border-[#0fa37f]/40'
