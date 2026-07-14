@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logo from '../../assets/dalil-subhi-logo-192.jpg';
+import Footer from './Footer';
 
 const navLinks = [
   { label: 'الصفحة الرئيسية', href: '/' },
@@ -119,92 +120,7 @@ export function PublicServicesShell() {
         <Outlet />
       </main>
 
-      <footer className="border-t border-[#ebdcb9]/50 bg-[#fcfaf5] text-[#0f172a]">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 text-right md:grid-cols-3" dir="rtl">
-            <div className="space-y-3">
-              <h3 className="text-base font-black text-[#071614]">مجمع الخدمات للمنطقة</h3>
-              <p className="text-sm leading-relaxed text-[#6b7280]">
-                منصة خفيفة وأنيقة لعرض خدمات المنطقة وروابطها الأساسية.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-base font-black text-[#071614]">للتواصل والدعم</h3>
-              <div className="mt-2 flex flex-col gap-2">
-                <a
-                  href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-fit items-center gap-2 rounded-full border border-[#0fa37f]/15 bg-white px-3 py-2 text-sm font-semibold text-[#0f766e] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0fa37f]/30 hover:bg-[#f6fbf8]"
-                >
-                  <span className="h-2 w-2 rounded-full bg-[#0fa37f]" />
-                  جروب الواتساب
-                </a>
-                <a
-                  href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-fit items-center gap-2 rounded-full border border-[#1877F2]/15 bg-white px-3 py-2 text-sm font-semibold text-[#1d4ed8] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1877F2]/30 hover:bg-[#f8fbff]"
-                >
-                  <span className="h-2 w-2 rounded-full bg-[#1877F2]" />
-                  جروب الفيس بوك
-                </a>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-base font-black text-[#071614]">روابط مهمة</h3>
-              <ul className="space-y-2 text-sm text-[#6b7280]">
-                <li>
-                  <a
-                    href="https://www.dalilsubhi.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors hover:text-[#0f766e]"
-                  >
-                    الصفحة الرئيسية
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors hover:text-[#0f766e]"
-                  >
-                    جروب الواتساب
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors hover:text-[#0f766e]"
-                  >
-                    جروب الفيس بوك
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://dalilsubhi.com/publishing-policy"
-                    className="transition-colors hover:text-[#0f766e]"
-                  >
-                    سياسة النشر والإعلان
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-8 border-t border-[#ebdcb9]/60 pt-6 text-center">
-            <p className="text-xs text-[#8a6d22]">
-              © 2026 مجمع الخدمات للمنطقة
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
