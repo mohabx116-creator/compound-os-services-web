@@ -16,6 +16,7 @@ import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
 import { getWhatsappHref } from '../../lib/whatsapp';
 import { SERVICES_HOME_FALLBACK } from '../../data/services-home-fallback';
 import logo from '../../assets/dalil-subhi-logo-192.jpg';
+import servicesIcon from '../../assets/services-icon.webp';
 
 const sectionCopy = {
   facilities: {
@@ -333,13 +334,9 @@ export function ServicesHomePage() {
               <div className="relative flex h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#d6b25e]/5 via-transparent to-transparent opacity-50" />
                 <img
-                  src={logo}
-                  alt="شعار دليل السبحي الرسمي"
-                  className="relative z-10 h-[92%] w-[92%] object-contain mix-blend-multiply drop-shadow-sm"
-                  style={{
-                    WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
-                    maskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
-                  }}
+                  src={servicesIcon}
+                  alt="شعار"
+                  className="relative z-10 h-[92%] w-[92%] object-contain drop-shadow-sm"
                   fetchPriority="high"
                 />
               </div>
