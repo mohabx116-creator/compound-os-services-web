@@ -8,7 +8,6 @@ import {
   HeartPulse,
   MapPin,
   PhoneCall,
-  Search,
   MessageCircle,
   ShieldAlert,
   ShoppingBasket,
@@ -727,7 +726,7 @@ export function CommunityHubPage() {
             <div className="grid gap-8 lg:grid-cols-[1fr] lg:items-start max-w-4xl mx-auto">
               <div className="space-y-6 text-center">
                 <div className="mx-auto flex flex-col items-center justify-center pt-1 pb-3 sm:pt-4">
-                  <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02] sm:h-72 sm:w-72 md:h-96 md:w-96">
+                  <div className="relative flex h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02]">
                     <div className="absolute inset-0 bg-gradient-to-tr from-[#d6b25e]/5 via-transparent to-transparent opacity-50" />
                     <img
                       src={dalilSubhiLogo}
@@ -747,23 +746,7 @@ export function CommunityHubPage() {
                   البوابة المجتمعية
                 </div>
 
-                <div className="mx-auto max-w-2xl">
-                  <label className="block text-right">
-                    <span className="sr-only">البحث في البوابة المجتمعية</span>
-                    <div className="relative">
-                      <Search
-                        size={18}
-                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
-                      />
-                      <input
-                        value={search}
-                        onChange={(event) => setSearch(event.target.value)}
-                        placeholder="اكتب اللي محتاجه… مستشفى، صيدلية، مطعم، طوارئ"
-                        className="w-full rounded-2xl border border-slate-200 bg-white px-12 py-4 text-right text-sm font-medium text-slate-900 outline-none shadow-sm transition-shadow placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-                      />
-                    </div>
-                  </label>
-                </div>
+
 
                 <div className="pt-4">
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
