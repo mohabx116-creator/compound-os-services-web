@@ -728,19 +728,29 @@ export function CommunityHubPage() {
                 <ArrowRight size={16} className="rotate-180" />
                 العودة إلى الخدمات
               </Link>
-
-              <span className="inline-flex self-start rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 sm:self-auto">
-                يتم تحديث ومراجعة البيانات دورياً
-              </span>
             </div>
 
             <div className="grid gap-8 lg:grid-cols-[1fr] lg:items-start max-w-4xl mx-auto">
               <div className="space-y-6 text-center">
-                <div className="space-y-4">
-                  <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl">البوابة المجتمعية</h1>
-                  <p className="max-w-2xl mx-auto text-base leading-8 text-slate-600 md:text-lg">
-                  ابحث بسرعة عن مطعم، مستشفى، صيدلية، رقم طوارئ أو رابط مهم داخل دليل السبحي.
-                  </p>
+                <div className="mx-auto flex flex-col items-center justify-center pt-1 pb-3 sm:pt-4">
+                  <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02] sm:h-72 sm:w-72 md:h-96 md:w-96">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#d6b25e]/5 via-transparent to-transparent opacity-50" />
+                    <img
+                      src={dalilSubhiLogo}
+                      alt="شعار دليل السبحي الرسمي"
+                      className="relative z-10 h-[92%] w-[92%] object-contain mix-blend-multiply drop-shadow-sm"
+                      style={{
+                        WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
+                        maskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
+                      }}
+                      fetchPriority="high"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-2 mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#ebdcb9] bg-white/80 px-3.5 py-1.5 text-xs font-bold text-[#5d4c18] shadow-sm backdrop-blur-md">
+                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#0fa37f]" />
+                  البوابة المجتمعية
                 </div>
 
                 <div className="mx-auto max-w-2xl">
@@ -759,35 +769,22 @@ export function CommunityHubPage() {
                       />
                     </div>
                   </label>
-                  
-                  <div className="mt-3 flex flex-wrap justify-center gap-2">
-                    <span className="text-xs text-slate-500 mt-1.5 ml-2">أمثلة سريعة:</span>
-                    {['مستشفى', 'صيدلية', 'مطعم', 'طوارئ'].map((example) => (
-                      <button
-                        key={example}
-                        onClick={() => handleSearchExample(example)}
-                        className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900"
-                      >
-                        {example}
-                      </button>
-                    ))}
-                  </div>
                 </div>
 
                 <div className="pt-4">
-                  <p className="mb-4 text-sm font-bold text-slate-500">اختار قسم أو ابحث مباشرة — والنتائج هتظهر فورًا.</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {heroHighlights.map((item) => (
                       <button
                         key={item.id}
                         onClick={() => handleShortcut(item.id as CommunityCategory)}
-                        className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 active:scale-95 text-center"
+                        className="group flex flex-col-reverse sm:flex-row items-center justify-center sm:justify-between rounded-2xl border border-[#ebdcb9]/40 bg-white/60 p-3 sm:px-5 sm:py-4 shadow-[0_8px_30px_rgba(7,22,20,0.03)] backdrop-blur-md gap-2 sm:gap-3 transition-all duration-300 hover:-translate-y-1 hover:border-[#d6b25e]/60 hover:bg-white hover:shadow-[0_12px_40px_rgba(214,178,94,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6b25e] text-center"
                       >
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-100 group-hover:text-emerald-700">
-                          {item.icon}
+                        <div className="text-center sm:text-right">
+                          <p className="text-sm sm:text-base font-black text-[#071614]">{item.title}</p>
                         </div>
-                        <h2 className="text-sm font-bold text-slate-900">{item.title}</h2>
-                        <p className="text-[11px] text-slate-500">{item.description}</p>
+                        <span className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-[#fcf9f2] border border-[#ebdcb9]/60 shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:bg-[#ebdcb9]/30 group-hover:border-[#ebdcb9]">
+                          <div className="text-emerald-700">{item.icon}</div>
+                        </span>
                       </button>
                     ))}
                   </div>

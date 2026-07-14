@@ -371,16 +371,26 @@ export function ServicesHomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.8),transparent_40%)]" />
 
           <div className="relative z-10 mx-auto max-w-4xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d6b25e]/20 bg-white/85 px-4 py-2 text-xs font-bold text-[#8a6d22] shadow-sm backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-[#0fa37f]" />
+            <div className="mx-auto flex flex-col items-center justify-center pt-1 pb-3 sm:pt-4">
+              <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02] sm:h-72 sm:w-72 md:h-96 md:w-96">
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#d6b25e]/5 via-transparent to-transparent opacity-50" />
+                <img
+                  src={logo}
+                  alt="شعار دليل السبحي الرسمي"
+                  className="relative z-10 h-[92%] w-[92%] object-contain mix-blend-multiply drop-shadow-sm"
+                  style={{
+                    WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
+                    maskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
+                  }}
+                  fetchPriority="high"
+                />
+              </div>
+            </div>
+
+            <div className="mt-2 mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#ebdcb9] bg-white/80 px-3.5 py-1.5 text-xs font-bold text-[#5d4c18] shadow-sm backdrop-blur-md">
+              <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#0fa37f]" />
               مجمع الخدمات للمنطقة
             </div>
-            <h1 className="text-3xl font-black leading-tight tracking-tight text-[#071614] sm:text-4xl md:text-5xl">
-              مجمع الخدمات للمنطقة
-            </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#55605d] sm:text-base md:text-lg">
-              ابحث بسرعة عن خدمة، مرفق، أو جهة تواصل داخل دليل السبحي عبر تجربة خفيفة وواضحة ومبنية على الهوية نفسها.
-            </p>
           </div>
         </section>
       </div>
@@ -395,9 +405,6 @@ export function ServicesHomePage() {
 
             <div className="relative z-10 mx-auto max-w-2xl text-center">
               <h2 className="text-2xl font-black text-[#071614] sm:text-3xl">روابط مهمة</h2>
-              <p className="mt-2 text-sm leading-7 text-[#55605d]">
-                وصول مباشر إلى القنوات الأساسية مع نفس اللمسة الهادئة الموجودة في اللاندينج والبوابة المجتمعية.
-              </p>
             </div>
 
             <div className="relative z-10 mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -420,7 +427,6 @@ export function ServicesHomePage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-[#071614] sm:text-lg">{link.title}</h3>
-                    <p className="text-sm leading-6 text-[#64748b]">{link.text}</p>
                   </div>
                 </a>
               ))}
@@ -438,9 +444,6 @@ export function ServicesHomePage() {
                   البوابة المجتمعية
                 </div>
                 <h2 className="text-2xl font-black text-[#071614] sm:text-3xl md:text-4xl">البوابة المجتمعية</h2>
-                <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#55605d] sm:text-base">
-                  جامعات، مطاعم، طوارئ وإرشادات وروابط مهمة في مكان واحد، بنفس لغة السبحي الهادئة والمضبوطة.
-                </p>
                 <Link
                   to={ROUTES.COMMUNITY}
                   className="mt-6 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-6 py-3 text-sm font-bold text-white shadow-[0_12px_28px_rgba(15,163,127,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(15,163,127,0.2)]"
