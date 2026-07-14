@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import dalilSubhiLogo from '../../assets/dalil-subhi-logo.jpg';
+import communityIcon from '../../assets/community-icon.jpeg';
 import {
   ArrowRight,
   BookOpen,
@@ -725,7 +726,17 @@ export function CommunityHubPage() {
 
             <div className="grid gap-8 lg:grid-cols-[1fr] lg:items-start max-w-4xl mx-auto">
               <div className="space-y-6 text-center">
-
+                <div className="mx-auto flex flex-col items-center justify-center pt-1 pb-3 sm:pt-4">
+                  <div className="relative flex h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02]">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#d6b25e]/5 via-transparent to-transparent opacity-50" />
+                    <img
+                      src={communityIcon}
+                      alt="شعار البوابة"
+                      className="relative z-10 h-[92%] w-[92%] object-contain drop-shadow-sm"
+                      fetchPriority="high"
+                    />
+                  </div>
+                </div>
 
                 <div className="mt-2 mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#ebdcb9] bg-white/80 px-3.5 py-1.5 text-xs font-bold text-[#5d4c18] shadow-sm backdrop-blur-md">
                   <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#0fa37f]" />
