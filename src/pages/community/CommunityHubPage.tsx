@@ -614,13 +614,7 @@ export function CommunityHubPage() {
     });
   };
 
-  const handleSearchExample = (query: string) => {
-    setSearch(query);
-    setActiveCategory('all');
-    requestAnimationFrame(() => {
-      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  };
+
 
   const visibleItems = useMemo(() => communityHubItems.filter((item) => item.isPublic !== false), []);
 
