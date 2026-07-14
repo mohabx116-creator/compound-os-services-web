@@ -1,5 +1,5 @@
 import { memo, startTransition, useCallback, useEffect, useRef, useState } from 'react';
-import type { ReactNode, SVGProps, SyntheticEvent } from 'react';
+import type { ReactNode, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Building,
