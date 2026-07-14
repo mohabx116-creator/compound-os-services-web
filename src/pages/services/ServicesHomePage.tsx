@@ -320,7 +320,7 @@ export function ServicesHomePage() {
   return (
     <div className="text-right text-on-surface" dir="rtl">
       <div className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.12),transparent_35%),radial-gradient(circle_at_top_right,rgba(15,163,127,0.09),transparent_30%),linear-gradient(180deg,#fbf8f1_0%,#fffefb_100%)]">
-        <section className="relative overflow-hidden px-4 py-10 sm:py-16">
+        <section className="relative overflow-hidden px-4 pt-10 pb-4 sm:pt-16 sm:pb-6">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.065] mix-blend-multiply"
@@ -342,7 +342,7 @@ export function ServicesHomePage() {
               </div>
             </div>
 
-            <div className="mt-2 mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#ebdcb9] bg-white/80 px-3.5 py-1.5 text-xs font-bold text-[#5d4c18] shadow-sm backdrop-blur-md">
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#ebdcb9] bg-white/80 px-3.5 py-1.5 text-xs font-bold text-[#5d4c18] shadow-sm backdrop-blur-md">
               <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#0fa37f]" />
               مجمع الخدمات للمنطقة
             </div>
@@ -350,13 +350,8 @@ export function ServicesHomePage() {
         </section>
       </div>
 
-      <div className="relative bg-[#fffdf8] pb-16">
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-10 flex justify-center">
-            <h2 className="inline-flex items-center justify-center rounded-2xl border border-[#ebdcb9] bg-white/80 px-8 py-3 text-xl font-black text-[#071614] shadow-sm backdrop-blur-md sm:text-2xl">
-              خدمات المنطقة
-            </h2>
-          </div>
+      <div className="relative bg-[#fffdf8] pb-12">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 pt-2 pb-10 sm:px-6 lg:px-8">
           <div className="space-y-10">
 
             <ServicesSection
