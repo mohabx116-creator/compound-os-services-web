@@ -226,7 +226,6 @@ function ServicesSectionView({
           </div>
           <div className="space-y-1">
             <h2 className="text-xl font-black leading-tight text-[#071614] sm:text-2xl">{title}</h2>
-            <p className="text-sm text-[#6b7280]">{empty}</p>
           </div>
         </div>
       </div>
@@ -333,7 +332,7 @@ export function ServicesHomePage() {
 
           <div className="relative z-10 mx-auto max-w-4xl text-center">
             <div className="mx-auto flex flex-col items-center justify-center pt-1 pb-3 sm:pt-4">
-              <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02] sm:h-72 sm:w-72 md:h-96 md:w-96">
+              <div className="relative flex h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 items-center justify-center overflow-hidden rounded-full border border-[#ebdcb9]/40 bg-white/80 shadow-[0_8px_30px_rgba(214,178,94,0.08)] backdrop-blur-sm transition-transform duration-700 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#d6b25e]/5 via-transparent to-transparent opacity-50" />
                 <img
                   src={logo}
