@@ -205,13 +205,11 @@ function ServicesSectionView({
   title,
   icon,
   items,
-  empty,
 }: {
   id: string;
   title: string;
   icon: ReactNode;
   items: ServiceItem[];
-  empty: string;
 }) {
   if (items.length === 0) {
     return null;
@@ -369,7 +367,6 @@ export function ServicesHomePage() {
               title={sectionCopy.facilities.title}
               icon={sectionCopy.facilities.icon}
               items={facilities}
-              empty={sectionCopy.facilities.empty}
             />
 
             <ServicesSection
@@ -377,7 +374,6 @@ export function ServicesHomePage() {
               title={sectionCopy.technical.title}
               icon={sectionCopy.technical.icon}
               items={technicalServices}
-              empty={sectionCopy.technical.empty}
             />
 
             <ServicesSection
@@ -385,7 +381,6 @@ export function ServicesHomePage() {
               title={sectionCopy.realEstate.title}
               icon={sectionCopy.realEstate.icon}
               items={realEstateServices}
-              empty={sectionCopy.realEstate.empty}
             />
 
             {!hasAnyServices && (
