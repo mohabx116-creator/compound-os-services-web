@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { getCachedServicesHome, getServicesHome } from '../../lib/api/services-service';
 import type { ServiceItem, ServicesHomeResponse } from '../../lib/api/types';
-import { ROUTES } from '../../lib/constants/routes';
 import { getWhatsappHref } from '../../lib/whatsapp';
 import { SERVICES_HOME_FALLBACK } from '../../data/services-home-fallback';
 import logo from '../../assets/dalil-subhi-logo-192.jpg';
@@ -70,21 +69,6 @@ function createInitialServicesState() {
   };
 }
 
-const FacebookIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    stroke="currentColor"
-    strokeWidth="2"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-  </svg>
-);
 
 const actionButtonBase =
   'inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4';
@@ -334,29 +318,6 @@ export function ServicesHomePage() {
     );
   }
 
-  const quickLinks = [
-    {
-      href: 'https://chat.whatsapp.com/ECEZfbsvjlU43eDvKa9XUu',
-      icon: <MessageCircle size={24} className="text-[#0fa37f]" />,
-      title: 'جروب الواتساب',
-      text: 'للتواصل السريع والمتابعة اليومية',
-      tone: 'emerald',
-    },
-    {
-      href: 'https://www.facebook.com/share/g/1CzbCwjugk/?mibextid=KtfwRi',
-      icon: <FacebookIcon className="h-6 w-6 text-[#1877F2]" />,
-      title: 'جروب الفيس بوك',
-      text: 'للنقاشات والإشعارات العامة',
-      tone: 'blue',
-    },
-    {
-      href: 'https://www.dalilsubhi.com/',
-      icon: <img src={logo} alt="" className="h-6 w-6 object-cover" />,
-      title: 'دليل السبحي',
-      text: 'الصفحة الرئيسية للمجمع',
-      tone: 'gold',
-    },
-  ] as const;
 
   return (
     <div className="text-right text-on-surface" dir="rtl">
@@ -396,62 +357,13 @@ export function ServicesHomePage() {
       </div>
 
       <div className="relative bg-[#fffdf8] pb-16">
-        <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-[2rem] border border-[#ebdcb9]/50 bg-white/88 p-4 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-8">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.08),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.06),transparent_30%)]" />
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.08] mix-blend-multiply">
-              <img src={logo} alt="" className="w-[260px] sm:w-[380px]" />
-            </div>
-
-            <div className="relative z-10 mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-black text-[#071614] sm:text-3xl">روابط مهمة</h2>
-            </div>
-
-            <div className="relative z-10 mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-              {quickLinks.map((link) => (
-                <a
-                  key={link.title}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`group flex h-full flex-col justify-between rounded-[1.75rem] border bg-white/90 p-4 text-center shadow-[0_12px_30px_rgba(7,22,20,0.04)] transition-all duration-300 hover:-translate-y-1 sm:p-5 ${
-                    link.tone === 'blue'
-                      ? 'border-[#1877F2]/15 hover:border-[#1877F2]/30'
-                      : link.tone === 'gold'
-                        ? 'border-[#d6b25e]/18 hover:border-[#d6b25e]/35'
-                        : 'border-[#0fa37f]/15 hover:border-[#0fa37f]/30'
-                  }`}
-                >
-                  <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#ebdcb9]/40 bg-[#fcfaf5] shadow-sm transition-transform duration-300 group-hover:scale-105">
-                    {link.icon}
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base font-black text-[#071614] sm:text-lg">{link.title}</h3>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-10 flex justify-center">
+            <h2 className="inline-flex items-center justify-center rounded-2xl border border-[#ebdcb9] bg-white/80 px-8 py-3 text-xl font-black text-[#071614] shadow-sm backdrop-blur-md sm:text-2xl">
+              خدمات المنطقة
+            </h2>
+          </div>
           <div className="space-y-10">
-            <section className="relative overflow-hidden rounded-[2rem] border border-[#d6b25e]/18 bg-gradient-to-br from-[#fffaf0] via-white to-[#eef8f4] p-5 shadow-[0_16px_45px_rgba(7,22,20,0.04)] sm:p-10">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,178,94,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(15,163,127,0.08),transparent_26%)]" />
-              <div className="relative z-10 mx-auto max-w-3xl text-center">
-                <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-[#0fa37f]/15 bg-white/90 px-4 py-2 text-xs font-bold text-[#0f766e] shadow-sm">
-                  <MapPin size={14} className="text-[#0fa37f]" />
-                  البوابة المجتمعية
-                </div>
-                <h2 className="text-2xl font-black text-[#071614] sm:text-3xl md:text-4xl">البوابة المجتمعية</h2>
-                <Link
-                  to={ROUTES.COMMUNITY}
-                  className="mt-6 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-6 py-3 text-sm font-bold text-white shadow-[0_12px_28px_rgba(15,163,127,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(15,163,127,0.2)]"
-                >
-                  استكشف البوابة المجتمعية
-                </Link>
-              </div>
-            </section>
 
             <ServicesSection
               id="facilities"
