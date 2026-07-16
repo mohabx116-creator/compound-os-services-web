@@ -7,6 +7,7 @@ import {
   Mail,
   MapPin,
   Navigation,
+  Maximize2,
   PhoneCall,
   School,
   Sparkles,
@@ -216,6 +217,7 @@ function ActionRow({
 export function SponsoredSutechSection() {
   const [contactOpen, setContactOpen] = useState(false);
   const [directionsOpen, setDirectionsOpen] = useState(false);
+  const [activeImage, setActiveImage] = useState<(typeof sutechGallery)[number] | null>(null);
 
   return (
     <section
@@ -309,21 +311,27 @@ export function SponsoredSutechSection() {
         <div className="space-y-4 border-t border-emerald-100 bg-white/55 p-5 sm:p-7 lg:border-t-0 lg:border-r lg:p-8">
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {sutechGallery.map((image, index) => (
-              <figure
+              <button
                 key={image.src}
+                type="button"
+                onClick={() => setActiveImage(image)}
+                aria-label={`عرض الصورة كاملة: ${image.caption}`}
                 className={`group relative overflow-hidden rounded-[1.5rem] border border-white/80 bg-slate-100 shadow-sm ${image.className ?? ''} ${index === 0 ? 'min-h-[220px] sm:min-h-[320px]' : 'min-h-[150px] sm:min-h-[165px]'}`}
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  className={`h-full w-full transition-transform duration-500 group-hover:scale-[1.03] ${index === 0 ? 'object-contain bg-white p-2 sm:p-3' : 'object-cover'}`}
                   loading={index === 0 ? 'eager' : 'lazy'}
                   decoding="async"
                 />
+                <div className="pointer-events-none absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/85 text-slate-700 shadow-sm transition-transform group-hover:scale-105">
+                  <Maximize2 size={16} />
+                </div>
                 <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/70 via-slate-950/18 to-transparent px-3 py-3 text-right">
                   <span className="inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white">{image.caption}</span>
                 </figcaption>
-              </figure>
+              </button>
             ))}
           </div>
 
@@ -459,6 +467,49 @@ export function SponsoredSutechSection() {
             </a>
           </div>
         </ModalShell>
+      )}
+
+      {activeImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+          role="presentation"
+          onClick={() => setActiveImage(null)}
+          dir="rtl"
+        >
+          <div
+            className="relative w-full max-w-6xl overflow-hidden rounded-[2rem] bg-white shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`عرض كامل للصورة: ${activeImage.caption}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-slate-100 px-5 py-4 sm:px-6">
+              <div className="space-y-1">
+                <h3 className="text-lg font-black text-slate-900">عرض الصورة الكامل</h3>
+                <p className="text-sm text-slate-600">{activeImage.caption}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveImage(null)}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200"
+                aria-label="إغلاق"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="max-h-[84vh] overflow-auto bg-slate-50 p-3 sm:p-6">
+              <div className="overflow-hidden rounded-[1.5rem] bg-white shadow-sm">
+                <img
+                  src={activeImage.src}
+                  alt={activeImage.alt}
+                  className="h-auto max-h-[78vh] w-full object-contain"
+                  decoding="async"
+                />
+              </div>
+              <p className="mt-3 text-center text-sm text-slate-600">{activeImage.alt}</p>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
