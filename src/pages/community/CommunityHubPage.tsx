@@ -28,6 +28,7 @@ import {
 } from '../../data/community-hub';
 import { ROUTES } from '../../lib/constants/routes';
 import { getWhatsappHref } from '../../lib/whatsapp';
+import { SponsoredSutechSection } from './components/SponsoredSutechSection';
 
 const heroHighlights = [
   {
@@ -203,7 +204,7 @@ function getPhoneNumbers(item: CommunityHubItem) {
     return item.phoneNumbers;
   }
   if (item.phone) {
-    return item.phone.split(/[\/\-،,و]/).map(p => p.trim()).filter(Boolean).map(number => ({
+    return item.phone.split(/[/\-،,و]/).map(p => p.trim()).filter(Boolean).map(number => ({
       label: 'رقم عام',
       number,
       type: 'call' as const,
@@ -771,7 +772,7 @@ export function CommunityHubPage() {
                       <button
                         key={filter.key}
                         type="button"
-                        onClick={() => handleShortcut(filter.key as any)}
+                        onClick={() => handleShortcut(filter.key)}
                         className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
                           isActive
                             ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm'
@@ -802,6 +803,10 @@ export function CommunityHubPage() {
               محتوى موثوق وجاهز للاستخدام
             </div>
           )}
+
+          <div className="mb-10">
+            <SponsoredSutechSection />
+          </div>
 
           <section className="space-y-5">
             <SectionHeader
