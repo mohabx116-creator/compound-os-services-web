@@ -7,9 +7,9 @@ import Footer from './Footer';
 const SERVICES_ORIGIN = 'https://services-ds-core-91.dalilsubhi.com';
 
 const navLinks = [
-  { label: 'ط§ظ„طµظپط­ط© ط§ظ„ط±ط¦ظٹط³ظٹط©', href: '/' },
-  { label: 'ط§ظ„ط®ط¯ظ…ط§طھ ط§ظ„ط¹ط§ظ…ط©', href: '/services' },
-  { label: 'ط§ظ„ط®ط¯ظ…ط§طھ ط§ظ„ظپظ†ظٹط©', href: '/services' },
+  { label: 'الصفحة الرئيسية', href: '/' },
+  { label: 'الخدمات العامة', href: '/services' },
+  { label: 'الخدمات الفنية', href: '/services' },
 ];
 
 function updateHeadTag(
@@ -150,7 +150,7 @@ export function PublicServicesShell() {
               <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-[#d6b25e]/15 bg-[#fffaf0] shadow-sm">
                 <img
                   src={logo}
-                  alt="ظ…ط¬ظ…ط¹ ط§ظ„ط®ط¯ظ…ط§طھ ظ„ظ„ظ…ظ†ط·ظ‚ط©"
+                  alt="مجمع الخدمات للمنطقة"
                   className="h-full w-full object-cover"
                   decoding="async"
                   width="36"
@@ -158,8 +158,8 @@ export function PublicServicesShell() {
                 />
               </div>
               <div className="leading-tight">
-                <div className="text-base font-black tracking-tight text-[#071614] sm:text-lg">ظ…ط¬ظ…ط¹ ط§ظ„ط®ط¯ظ…ط§طھ ظ„ظ„ظ…ظ†ط·ظ‚ط©</div>
-                <div className="text-[11px] font-medium text-[#6b7280]">ط¯ظ„ظٹظ„ ط§ظ„ط³ط¨ط­ظٹ</div>
+                <div className="text-base font-black tracking-tight text-[#071614] sm:text-lg">مجمع الخدمات للمنطقة</div>
+                <div className="text-[11px] font-medium text-[#6b7280]">دليل السبحي</div>
               </div>
             </Link>
 
@@ -181,13 +181,13 @@ export function PublicServicesShell() {
                 href="https://dalilsubhi.com/"
                 className="rounded-full px-4 py-2 text-sm font-semibold text-[#4b5563] transition-all duration-300 hover:bg-[#f8f3e7] hover:text-[#0f3b35]"
               >
-                ط¯ظ„ظٹظ„ ط§ظ„ط³ط¨ط­ظٹ
+                دليل السبحي
               </a>
               <Link
                 to="/services"
                 className="mr-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(15,163,127,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,163,127,0.2)]"
               >
-                طھطµظپط­ ط§ظ„ط®ط¯ظ…ط§طھ
+                تصفح الخدمات
               </Link>
             </nav>
 
@@ -195,7 +195,7 @@ export function PublicServicesShell() {
               type="button"
               className="inline-flex items-center justify-center rounded-2xl border border-[#ebdcb9] bg-white p-2.5 text-[#0f3b35] shadow-sm transition-colors hover:border-[#d6b25e] hover:bg-[#fffaf0] md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="ظ‚ط§ط¦ظ…ط© ط§ظ„طھظ†ظ‚ظ„"
+              aria-label="قائمة التنقل"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -224,14 +224,14 @@ export function PublicServicesShell() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block rounded-2xl bg-[#fbf8f1] px-4 py-3 text-sm font-semibold text-[#4b5563] transition-all duration-300 hover:bg-[#f8f3e7] hover:text-[#0f3b35]"
               >
-                ط¯ظ„ظٹظ„ ط§ظ„ط³ط¨ط­ظٹ
+                دليل السبحي
               </a>
               <Link
                 to="/services"
                 onClick={() => setMobileMenuOpen(false)}
                 className="inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-[#0fa37f] to-[#0a8a6b] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_25px_rgba(15,163,127,0.15)] transition-all duration-300"
               >
-                طھطµظپط­ ط§ظ„ط®ط¯ظ…ط§طھ
+                تصفح الخدمات
               </Link>
             </div>
           </div>
