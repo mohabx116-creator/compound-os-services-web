@@ -31,7 +31,12 @@ function updateHeadTag(
 function useServicesSeo(pathname: string) {
   useEffect(() => {
     const normalizedPath = pathname.replace(/\/+$/, '') || '/';
-    const canonicalPath = normalizedPath === '/' ? '/services' : normalizedPath;
+    const canonicalPath =
+      normalizedPath === '/' || normalizedPath === '/services'
+        ? '/services'
+        : normalizedPath === '/community'
+          ? '/community'
+          : normalizedPath;
 
     const seo =
       normalizedPath === '/community'
