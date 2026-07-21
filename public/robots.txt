@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://services-ds-core-91.dalilsubhi.com/sitemap.xml
